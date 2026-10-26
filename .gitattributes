@@ -1,0 +1,3 @@
+# Keep split files byte-identical on every machine (no line-ending conversion by Git on Windows)
+data/splits/*.csv -text
+data/splits/*.json -text

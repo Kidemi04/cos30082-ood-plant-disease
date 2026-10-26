@@ -1,0 +1,8 @@
+# Dataset: never commit images or the original csv files. Only data/splits/ is tracked.
+data/*
+!data/splits/
+
+__pycache__/
+*.pyc
+.venv/
+venv/
