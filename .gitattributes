@@ -1,3 +1,8 @@
 # Keep split files byte-identical on every machine (no line-ending conversion by Git on Windows)
 data/splits/*.csv -text
 data/splits/*.json -text
+
+# Shared release reference must remain byte-identical.
+dataset/metadata/*.json -text
+*.py text eol=lf
+*.bat text eol=crlf
