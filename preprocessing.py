@@ -4,7 +4,7 @@ All models use these transforms, so differences in results come from the models,
 """
 from collections import Counter
 
-from PIL import Image, ImageOps
+from PIL import Image
 import torch
 from torch.utils.data import Dataset, WeightedRandomSampler
 from torchvision import transforms as T
@@ -15,6 +15,9 @@ IMAGE_SIZE = 224
 RESIZE_RATIO = 0.875  # evaluation: resize the shorter side to 256, then centre-crop 224
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
+ORIENTATION = {2: Image.Transpose.FLIP_LEFT_RIGHT, 3: Image.Transpose.ROTATE_180, 4: Image.Transpose.FLIP_TOP_BOTTOM,
+               5: Image.Transpose.TRANSPOSE, 6: Image.Transpose.ROTATE_270, 7: Image.Transpose.TRANSVERSE,
+               8: Image.Transpose.ROTATE_90}  # EXIF orientation tag -> transpose that displays the image upright
 
 
 def load_image(path, min_size=None):
@@ -26,7 +29,10 @@ def load_image(path, min_size=None):
     with Image.open(path) as image:
         if min_size and image.format in ('JPEG', 'MPO'):
             image.draft('RGB', (min_size, min_size))
-        return ImageOps.exif_transpose(image).convert('RGB')
+        # Not ImageOps.exif_transpose: it rewrites the EXIF block and fails on some malformed DPD-Small files.
+        method = ORIENTATION.get(image.getexif().get(0x0112))
+        image = image.convert('RGB')
+        return image.transpose(method) if method else image
 
 
 def train_transform(image_size=IMAGE_SIZE, mean=IMAGENET_MEAN, std=IMAGENET_STD):

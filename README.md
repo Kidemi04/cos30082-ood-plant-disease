@@ -1,5 +1,7 @@
 # Shared DPD-Small dataset setup
 
+**Training a model? Start with [USAGE.md](USAGE.md)**, a step-by-step guide from setup to results. This README is the full reference.
+
 All teammates use the same original archive, official splits, and label IDs. Setup verifies the release and prepares portable CSV files. It does not train a model or change the images.
 
 ## Get this repository
