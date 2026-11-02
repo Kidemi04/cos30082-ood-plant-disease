@@ -1,0 +1,1506 @@
+{
+  "splits": {
+    "train": {
+      "images": 8000,
+      "crops": 55,
+      "diseases": 175,
+      "compositions": 323,
+      "sources": 42
+    },
+    "test_seen": {
+      "images": 2000,
+      "crops": 55,
+      "diseases": 175,
+      "compositions": 323,
+      "sources": 43
+    },
+    "test_unseen": {
+      "images": 1448,
+      "crops": 9,
+      "diseases": 10,
+      "compositions": 10,
+      "sources": 9
+    }
+  },
+  "train_composition_imbalance": {
+    "min": 1,
+    "p25": 3,
+    "median": 7,
+    "p75": 23,
+    "max": 544,
+    "mean": 24.8,
+    "imbalance_ratio": 544.0,
+    "compositions_with_1_image": 40,
+    "compositions_with_at_most_2": 73,
+    "compositions_under_10": 183,
+    "top10_share_of_train": 0.280875,
+    "largest": [
+      [
+        "cassava_mosaic",
+        544
+      ],
+      [
+        "apple_healthy",
+        231
+      ],
+      [
+        "corn_healthy",
+        223
+      ],
+      [
+        "corn_streak_virus",
+        218
+      ],
+      [
+        "citrus_greening",
+        195
+      ],
+      [
+        "soybean_healthy",
+        191
+      ],
+      [
+        "tomato_yellow_leaf_curl_virus",
+        178
+      ],
+      [
+        "tomato_septoria_leaf_spot",
+        178
+      ],
+      [
+        "cassava_healthy",
+        152
+      ],
+      [
+        "apple_rust",
+        137
+      ]
+    ],
+    "sorted_counts": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      14,
+      14,
+      14,
+      14,
+      15,
+      15,
+      16,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18,
+      19,
+      19,
+      20,
+      21,
+      21,
+      21,
+      21,
+      21,
+      23,
+      23,
+      24,
+      25,
+      26,
+      26,
+      27,
+      28,
+      28,
+      29,
+      29,
+      31,
+      31,
+      32,
+      33,
+      36,
+      36,
+      37,
+      37,
+      38,
+      38,
+      39,
+      39,
+      40,
+      40,
+      40,
+      42,
+      44,
+      44,
+      44,
+      44,
+      46,
+      46,
+      47,
+      49,
+      57,
+      57,
+      59,
+      60,
+      64,
+      64,
+      65,
+      66,
+      68,
+      68,
+      69,
+      70,
+      70,
+      70,
+      71,
+      73,
+      73,
+      74,
+      75,
+      75,
+      78,
+      80,
+      82,
+      82,
+      85,
+      86,
+      87,
+      89,
+      92,
+      99,
+      112,
+      117,
+      121,
+      130,
+      134,
+      135,
+      137,
+      152,
+      178,
+      178,
+      191,
+      195,
+      218,
+      223,
+      231,
+      544
+    ]
+  },
+  "test_seen_composition_imbalance": {
+    "min": 1,
+    "p25": 1,
+    "median": 2,
+    "p75": 6,
+    "max": 124,
+    "mean": 6.2,
+    "compositions_with_1_image": 111,
+    "compositions_with_at_most_2": 171,
+    "largest": [
+      [
+        "cassava_mosaic",
+        124
+      ],
+      [
+        "corn_streak_virus",
+        55
+      ],
+      [
+        "apple_healthy",
+        50
+      ],
+      [
+        "tomato_yellow_leaf_curl_virus",
+        44
+      ],
+      [
+        "corn_healthy",
+        41
+      ]
+    ]
+  },
+  "crops": {
+    "tomato": {
+      "train_images": 1164,
+      "train_diseases": 17
+    },
+    "cassava": {
+      "train_images": 1160,
+      "train_diseases": 10
+    },
+    "apple": {
+      "train_images": 1016,
+      "train_diseases": 17
+    },
+    "corn": {
+      "train_images": 910,
+      "train_diseases": 20
+    },
+    "paddy": {
+      "train_images": 576,
+      "train_diseases": 17
+    },
+    "soybean": {
+      "train_images": 376,
+      "train_diseases": 9
+    },
+    "citrus": {
+      "train_images": 227,
+      "train_diseases": 5
+    },
+    "potato": {
+      "train_images": 215,
+      "train_diseases": 3
+    },
+    "grape": {
+      "train_images": 167,
+      "train_diseases": 6
+    },
+    "sugarcane": {
+      "train_images": 162,
+      "train_diseases": 12
+    },
+    "peach": {
+      "train_images": 142,
+      "train_diseases": 9
+    },
+    "wheat": {
+      "train_images": 142,
+      "train_diseases": 11
+    },
+    "coffee": {
+      "train_images": 135,
+      "train_diseases": 9
+    },
+    "mango": {
+      "train_images": 134,
+      "train_diseases": 22
+    },
+    "peanut": {
+      "train_images": 123,
+      "train_diseases": 5
+    },
+    "olive": {
+      "train_images": 117,
+      "train_diseases": 3
+    },
+    "banana": {
+      "train_images": 106,
+      "train_diseases": 11
+    },
+    "pear": {
+      "train_images": 103,
+      "train_diseases": 5
+    },
+    "cherry": {
+      "train_images": 83,
+      "train_diseases": 3
+    },
+    "pepper_bell": {
+      "train_images": 63,
+      "train_diseases": 4
+    },
+    "papaya": {
+      "train_images": 62,
+      "train_diseases": 5
+    },
+    "strawberry": {
+      "train_images": 62,
+      "train_diseases": 3
+    },
+    "pumpkin": {
+      "train_images": 60,
+      "train_diseases": 1
+    },
+    "cotton": {
+      "train_images": 56,
+      "train_diseases": 5
+    },
+    "blueberry": {
+      "train_images": 54,
+      "train_diseases": 6
+    },
+    "blackgram": {
+      "train_images": 54,
+      "train_diseases": 5
+    },
+    "bean": {
+      "train_images": 50,
+      "train_diseases": 6
+    },
+    "cashew": {
+      "train_images": 49,
+      "train_diseases": 1
+    },
+    "tea": {
+      "train_images": 49,
+      "train_diseases": 10
+    },
+    "guava": {
+      "train_images": 44,
+      "train_diseases": 9
+    },
+    "rose": {
+      "train_images": 41,
+      "train_diseases": 3
+    },
+    "palm": {
+      "train_images": 40,
+      "train_diseases": 3
+    },
+    "cucumber": {
+      "train_images": 36,
+      "train_diseases": 5
+    },
+    "cauliflower": {
+      "train_images": 25,
+      "train_diseases": 6
+    },
+    "sunflower": {
+      "train_images": 22,
+      "train_diseases": 4
+    },
+    "raspberry": {
+      "train_images": 19,
+      "train_diseases": 5
+    },
+    "zucchini": {
+      "train_images": 19,
+      "train_diseases": 4
+    },
+    "chilli": {
+      "train_images": 17,
+      "train_diseases": 4
+    },
+    "plum": {
+      "train_images": 15,
+      "train_diseases": 6
+    },
+    "garlic": {
+      "train_images": 13,
+      "train_diseases": 2
+    },
+    "basil": {
+      "train_images": 11,
+      "train_diseases": 3
+    },
+    "squash": {
+      "train_images": 8,
+      "train_diseases": 1
+    },
+    "eggplant": {
+      "train_images": 8,
+      "train_diseases": 3
+    },
+    "lettuce": {
+      "train_images": 8,
+      "train_diseases": 2
+    },
+    "coriander": {
+      "train_images": 7,
+      "train_diseases": 1
+    },
+    "tobacco": {
+      "train_images": 7,
+      "train_diseases": 4
+    },
+    "broccoli": {
+      "train_images": 6,
+      "train_diseases": 3
+    },
+    "ginger": {
+      "train_images": 6,
+      "train_diseases": 2
+    },
+    "carrot": {
+      "train_images": 5,
+      "train_diseases": 3
+    },
+    "cabbage": {
+      "train_images": 5,
+      "train_diseases": 3
+    },
+    "walnut": {
+      "train_images": 5,
+      "train_diseases": 1
+    },
+    "brassica": {
+      "train_images": 5,
+      "train_diseases": 1
+    },
+    "apricot": {
+      "train_images": 4,
+      "train_diseases": 2
+    },
+    "celery": {
+      "train_images": 4,
+      "train_diseases": 2
+    },
+    "maple": {
+      "train_images": 3,
+      "train_diseases": 1
+    }
+  },
+  "diseases": {
+    "shared_by_several_crops": 42,
+    "specific_to_one_crop": 133,
+    "most_shared": [
+      [
+        "healthy",
+        37
+      ],
+      [
+        "rust",
+        12
+      ],
+      [
+        "downy_mildew",
+        11
+      ],
+      [
+        "powdery_mildew",
+        11
+      ],
+      [
+        "anthracnose",
+        9
+      ],
+      [
+        "brown_spot",
+        8
+      ],
+      [
+        "spot",
+        7
+      ],
+      [
+        "leaf_blight",
+        6
+      ],
+      [
+        "bacterial_spot",
+        5
+      ],
+      [
+        "black_rot",
+        5
+      ]
+    ],
+    "diseases_per_crop": {
+      "min": 1,
+      "p25": 3,
+      "median": 4,
+      "p75": 9,
+      "max": 22,
+      "mean": 5.9
+    }
+  },
+  "unseen_compositions": [
+    {
+      "composition_id": 303,
+      "composition": "tomato_early_blight",
+      "crop": "tomato",
+      "disease": "early_blight",
+      "test_images": 472,
+      "share_of_unseen_test": 0.3259668508287293,
+      "crop_train_images": 1164,
+      "crop_train_diseases": 17,
+      "disease_train_images": 102,
+      "disease_train_crops": [
+        "celery",
+        "potato"
+      ],
+      "sources": {
+        "CDDM": 327,
+        "PWV2": 145
+      },
+      "sources_in_train": {
+        "CDDM": 3073,
+        "PWV2": 341
+      }
+    },
+    {
+      "composition_id": 144,
+      "composition": "grape_black_rot",
+      "crop": "grape",
+      "disease": "black_rot",
+      "test_images": 271,
+      "share_of_unseen_test": 0.1871546961325967,
+      "crop_train_images": 167,
+      "crop_train_diseases": 6,
+      "disease_train_images": 36,
+      "disease_train_crops": [
+        "apple",
+        "brassica",
+        "cabbage",
+        "cauliflower",
+        "coffee"
+      ],
+      "sources": {
+        "CDDM": 145,
+        "PWV2": 114,
+        "CUPD": 12
+      },
+      "sources_in_train": {
+        "CDDM": 3073,
+        "PWV2": 341,
+        "CUPD": 706
+      }
+    },
+    {
+      "composition_id": 39,
+      "composition": "pepper_bell_bacterial_spot",
+      "crop": "pepper_bell",
+      "disease": "bacterial_spot",
+      "test_images": 220,
+      "share_of_unseen_test": 0.15193370165745856,
+      "crop_train_images": 63,
+      "crop_train_diseases": 4,
+      "disease_train_images": 188,
+      "disease_train_crops": [
+        "cauliflower",
+        "papaya",
+        "peach",
+        "plum",
+        "tomato"
+      ],
+      "sources": {
+        "CDDM": 155,
+        "PWV2": 56,
+        "CUPD": 9
+      },
+      "sources_in_train": {
+        "CDDM": 3073,
+        "PWV2": 341,
+        "CUPD": 706
+      }
+    },
+    {
+      "composition_id": 124,
+      "composition": "cotton_bacterial_blight",
+      "crop": "cotton",
+      "disease": "bacterial_blight",
+      "test_images": 125,
+      "share_of_unseen_test": 0.08632596685082873,
+      "crop_train_images": 56,
+      "crop_train_diseases": 5,
+      "disease_train_images": 147,
+      "disease_train_crops": [
+        "cassava",
+        "paddy",
+        "soybean"
+      ],
+      "sources": {
+        "COPD": 71,
+        "CUPD": 54
+      },
+      "sources_in_train": {
+        "COPD": 53,
+        "CUPD": 706
+      }
+    },
+    {
+      "composition_id": 166,
+      "composition": "mango_anthracnose",
+      "crop": "mango",
+      "disease": "anthracnose",
+      "test_images": 95,
+      "share_of_unseen_test": 0.06560773480662983,
+      "crop_train_images": 134,
+      "crop_train_diseases": 22,
+      "disease_train_images": 51,
+      "disease_train_crops": [
+        "banana",
+        "blackgram",
+        "blueberry",
+        "celery",
+        "cucumber",
+        "papaya",
+        "peach",
+        "strawberry",
+        "tea"
+      ],
+      "sources": {
+        "MLBD": 95
+      },
+      "sources_in_train": {
+        "MLBD": 100
+      }
+    },
+    {
+      "composition_id": 276,
+      "composition": "sugarcane_rust",
+      "crop": "sugarcane",
+      "disease": "rust",
+      "test_images": 89,
+      "share_of_unseen_test": 0.06146408839779006,
+      "crop_train_images": 162,
+      "crop_train_diseases": 12,
+      "disease_train_images": 297,
+      "disease_train_crops": [
+        "apple",
+        "bean",
+        "blueberry",
+        "coffee",
+        "corn",
+        "garlic",
+        "guava",
+        "peach",
+        "peanut",
+        "plum",
+        "soybean",
+        "wheat"
+      ],
+      "sources": {
+        "SLDD": 89
+      },
+      "sources_in_train": {
+        "SLDD": 62
+      }
+    },
+    {
+      "composition_id": 84,
+      "composition": "cherry_aphis_spp",
+      "crop": "cherry",
+      "disease": "aphis_spp",
+      "test_images": 72,
+      "share_of_unseen_test": 0.049723756906077346,
+      "crop_train_images": 83,
+      "crop_train_diseases": 3,
+      "disease_train_images": 7,
+      "disease_train_crops": [
+        "apple",
+        "plum"
+      ],
+      "sources": {
+        "PDN": 72
+      },
+      "sources_in_train": {
+        "PDN": 79
+      }
+    },
+    {
+      "composition_id": 136,
+      "composition": "cucumber_powdery_mildew",
+      "crop": "cucumber",
+      "disease": "powdery_mildew",
+      "test_images": 37,
+      "share_of_unseen_test": 0.025552486187845305,
+      "crop_train_images": 36,
+      "crop_train_diseases": 5,
+      "disease_train_images": 226,
+      "disease_train_crops": [
+        "apple",
+        "blackgram",
+        "cherry",
+        "cotton",
+        "mango",
+        "pepper_bell",
+        "pumpkin",
+        "squash",
+        "tomato",
+        "wheat",
+        "zucchini"
+      ],
+      "sources": {
+        "PWV2": 37
+      },
+      "sources_in_train": {
+        "PWV2": 341
+      }
+    },
+    {
+      "composition_id": 107,
+      "composition": "corn_brown_spot",
+      "crop": "corn",
+      "disease": "brown_spot",
+      "test_images": 35,
+      "share_of_unseen_test": 0.024171270718232045,
+      "crop_train_images": 910,
+      "crop_train_diseases": 20,
+      "disease_train_images": 261,
+      "disease_train_crops": [
+        "apple",
+        "cassava",
+        "paddy",
+        "palm",
+        "soybean",
+        "sugarcane",
+        "tobacco",
+        "tomato"
+      ],
+      "sources": {
+        "FP": 35
+      },
+      "sources_in_train": {
+        "FP": 143
+      }
+    },
+    {
+      "composition_id": 133,
+      "composition": "cucumber_downy_mildew",
+      "crop": "cucumber",
+      "disease": "downy_mildew",
+      "test_images": 32,
+      "share_of_unseen_test": 0.022099447513812154,
+      "crop_train_images": 36,
+      "crop_train_diseases": 5,
+      "disease_train_images": 69,
+      "disease_train_crops": [
+        "basil",
+        "broccoli",
+        "cabbage",
+        "cauliflower",
+        "grape",
+        "lettuce",
+        "paddy",
+        "rose",
+        "soybean",
+        "sunflower",
+        "zucchini"
+      ],
+      "sources": {
+        "CDRD": 32
+      },
+      "sources_in_train": {
+        "CDRD": 27
+      }
+    }
+  ],
+  "sources": {
+    "train": [
+      [
+        "CDDM",
+        3073
+      ],
+      [
+        "CUPD",
+        706
+      ],
+      [
+        "CPDD",
+        517
+      ],
+      [
+        "MTID",
+        503
+      ],
+      [
+        "PD",
+        477
+      ],
+      [
+        "PWV2",
+        341
+      ],
+      [
+        "CDC",
+        208
+      ],
+      [
+        "SBL",
+        160
+      ],
+      [
+        "FP",
+        143
+      ],
+      [
+        "PDL2",
+        134
+      ],
+      [
+        "GLD",
+        123
+      ],
+      [
+        "OD",
+        117
+      ],
+      [
+        "LSAN",
+        103
+      ],
+      [
+        "CLDI",
+        102
+      ],
+      [
+        "SCLD",
+        100
+      ],
+      [
+        "MLBD",
+        100
+      ],
+      [
+        "DMOS",
+        93
+      ],
+      [
+        "PDN",
+        79
+      ],
+      [
+        "APPD",
+        70
+      ],
+      [
+        "BDPL",
+        62
+      ],
+      [
+        "SLDD",
+        62
+      ],
+      [
+        "OSF",
+        61
+      ],
+      [
+        "CD",
+        57
+      ],
+      [
+        "BPLD",
+        54
+      ],
+      [
+        "COPD",
+        53
+      ],
+      [
+        "BLDI",
+        52
+      ],
+      [
+        "TSD",
+        43
+      ],
+      [
+        "FN",
+        41
+      ],
+      [
+        "DPD",
+        40
+      ],
+      [
+        "BLD2",
+        39
+      ],
+      [
+        "ESCA",
+        38
+      ],
+      [
+        "MPC",
+        34
+      ],
+      [
+        "BLSD",
+        33
+      ],
+      [
+        "CDRD",
+        27
+      ],
+      [
+        "COF2",
+        25
+      ],
+      [
+        "RDD1",
+        25
+      ],
+      [
+        "CC",
+        24
+      ],
+      [
+        "GD",
+        23
+      ],
+      [
+        "VN",
+        23
+      ],
+      [
+        "SFLD",
+        22
+      ],
+      [
+        "RDD2",
+        7
+      ],
+      [
+        "COF",
+        6
+      ]
+    ],
+    "test_seen": [
+      [
+        "CDDM",
+        482
+      ],
+      [
+        "CUPD",
+        279
+      ],
+      [
+        "PWV2",
+        233
+      ],
+      [
+        "CPDD",
+        152
+      ],
+      [
+        "MTID",
+        120
+      ],
+      [
+        "PD",
+        83
+      ],
+      [
+        "FP",
+        70
+      ],
+      [
+        "SBL",
+        52
+      ],
+      [
+        "LSAN",
+        45
+      ],
+      [
+        "RDD1",
+        36
+      ],
+      [
+        "MLBD",
+        30
+      ],
+      [
+        "PDN",
+        27
+      ],
+      [
+        "ESCA",
+        24
+      ],
+      [
+        "OD",
+        23
+      ],
+      [
+        "MPC",
+        23
+      ],
+      [
+        "GLD",
+        23
+      ],
+      [
+        "SCLD",
+        22
+      ],
+      [
+        "SLDD",
+        22
+      ],
+      [
+        "DMOS",
+        21
+      ],
+      [
+        "BDPL",
+        18
+      ],
+      [
+        "PDL3",
+        17
+      ],
+      [
+        "RDD2",
+        16
+      ],
+      [
+        "PDL",
+        15
+      ],
+      [
+        "OSF",
+        15
+      ],
+      [
+        "BPLD",
+        15
+      ],
+      [
+        "BLDI",
+        14
+      ],
+      [
+        "DPD",
+        13
+      ],
+      [
+        "COPD",
+        12
+      ],
+      [
+        "TSD",
+        12
+      ],
+      [
+        "SFLD",
+        10
+      ],
+      [
+        "BLSD",
+        10
+      ],
+      [
+        "PDL2",
+        10
+      ],
+      [
+        "GD",
+        8
+      ],
+      [
+        "BLD",
+        8
+      ],
+      [
+        "FN",
+        7
+      ],
+      [
+        "CDRD",
+        7
+      ],
+      [
+        "CD",
+        6
+      ],
+      [
+        "COF",
+        5
+      ],
+      [
+        "BLD3",
+        5
+      ],
+      [
+        "VN",
+        4
+      ],
+      [
+        "CC",
+        4
+      ],
+      [
+        "CLDI",
+        1
+      ],
+      [
+        "APPD",
+        1
+      ]
+    ],
+    "test_unseen": [
+      [
+        "CDDM",
+        627
+      ],
+      [
+        "PWV2",
+        352
+      ],
+      [
+        "MLBD",
+        95
+      ],
+      [
+        "SLDD",
+        89
+      ],
+      [
+        "CUPD",
+        75
+      ],
+      [
+        "PDN",
+        72
+      ],
+      [
+        "COPD",
+        71
+      ],
+      [
+        "FP",
+        35
+      ],
+      [
+        "CDRD",
+        32
+      ]
+    ]
+  },
+  "sources_with_one_crop": {
+    "sources": 36,
+    "of": 42,
+    "train_images": 3141
+  },
+  "sources_only_in_test": [
+    "BLD",
+    "BLD3",
+    "PDL",
+    "PDL3"
+  ],
+  "validation_split": {
+    "train_images": 6779,
+    "validation_images": 1221,
+    "validation_compositions": 250
+  },
+  "images": {
+    "train": {
+      "width": {
+        "min": 89,
+        "p25": 256,
+        "median": 448.0,
+        "p75": 800,
+        "max": 6000,
+        "mean": 799.4
+      },
+      "height": {
+        "min": 73,
+        "p25": 256,
+        "median": 448.0,
+        "p75": 640,
+        "max": 5312,
+        "mean": 738.5
+      },
+      "shorter_side": {
+        "min": 73,
+        "p25": 256,
+        "median": 448.0,
+        "p75": 600,
+        "max": 4000,
+        "mean": 669.9
+      },
+      "modes": {
+        "RGB": 7980,
+        "RGBA": 20
+      },
+      "formats": {
+        "JPEG": 7872,
+        "MPO": 102,
+        "PNG": 24,
+        "WEBP": 2
+      },
+      "distinct_sizes": 706
+    },
+    "test_seen": {
+      "width": {
+        "min": 94,
+        "p25": 345,
+        "median": 500.0,
+        "p75": 960,
+        "max": 6000,
+        "mean": 934.2
+      },
+      "height": {
+        "min": 92,
+        "p25": 299,
+        "median": 500.0,
+        "p75": 800,
+        "max": 4752,
+        "mean": 844.5
+      },
+      "shorter_side": {
+        "min": 92,
+        "p25": 299,
+        "median": 480.0,
+        "p75": 768,
+        "max": 4000,
+        "mean": 771.2
+      },
+      "modes": {
+        "RGB": 1997,
+        "RGBA": 3
+      },
+      "formats": {
+        "JPEG": 1978,
+        "MPO": 19,
+        "PNG": 3
+      },
+      "distinct_sizes": 387
+    },
+    "test_unseen": {
+      "width": {
+        "min": 69,
+        "p25": 256,
+        "median": 300.0,
+        "p75": 640,
+        "max": 5184,
+        "mean": 587.2
+      },
+      "height": {
+        "min": 52,
+        "p25": 256,
+        "median": 286.5,
+        "p75": 540,
+        "max": 4608,
+        "mean": 556.8
+      },
+      "shorter_side": {
+        "min": 52,
+        "p25": 256,
+        "median": 256.0,
+        "p75": 510,
+        "max": 3888,
+        "mean": 506.9
+      },
+      "modes": {
+        "RGB": 1443,
+        "RGBA": 5
+      },
+      "formats": {
+        "JPEG": 1441,
+        "PNG": 6,
+        "MPO": 1
+      },
+      "distinct_sizes": 421
+    }
+  },
+  "augmentation_examples": [
+    "banana_sigatoka",
+    "soybean_healthy",
+    "tomato_healthy",
+    "tomato_healthy",
+    "potato_healthy",
+    "tomato_bacterial_spot",
+    "wheat_healthy",
+    "cucumber_bacterial_wilt"
+  ]
+}

@@ -109,6 +109,46 @@ train, val = load_validation_split()   # 6,779 + 1,221 records
 
 Use `val` for model selection and tuning. The test splits are for final results only.
 
+## Data exploration
+
+[docs/data_exploration/README.md](docs/data_exploration/README.md) has the figures and findings for the report: class imbalance, crops and diseases, the 10 unseen compositions, source datasets and image sizes. Regenerate it with `python scripts/explore_dataset.py`. The augmentation example image is only made when PyTorch is installed.
+
+Findings that affect model design:
+- Training images per composition range from 1 to 544, with a median of 7. 40 compositions have a single training image.
+- Every unseen crop and disease appears in training, never together. `cherry_aphis_spp` is the hardest case: aphis_spp has only 7 training images.
+- 36 of the 42 source datasets contain one crop, so a model can tell the crop from the photo style. Disease recognition is the real difficulty.
+- Unseen test images are smaller (median shorter side 256 px, against 448 px in train).
+
+## Preprocessing and augmentation
+
+All models use [preprocessing.py](preprocessing.py), so differences in results come from the models, not the input pipeline. It needs `torch` and `torchvision`.
+
+| Step | Training | Validation, test and UI |
+|---|---|---|
+| Loading | RGB, EXIF orientation applied; large JPEGs decoded at reduced size (shorter side at least 256) | same |
+| Resize | `RandomResizedCrop(224, scale=(0.5, 1.0))` | resize shorter side to 256, centre-crop 224 |
+| Flips | horizontal and vertical, p = 0.5 each | none |
+| Colour | `ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.02)` | none |
+| Normalise | ImageNet mean and std | same |
+
+Hue jitter is kept small because leaf colour (yellowing, rust, mildew) is itself a disease symptom.
+
+```python
+from torch.utils.data import DataLoader
+from preprocessing import build_datasets, balanced_sampler
+
+datasets = build_datasets()   # train, val, test_seen, test_unseen
+train_loader = DataLoader(datasets['train'], batch_size=32, shuffle=True, num_workers=4)
+for batch in train_loader:
+    images, crops, diseases = batch['image'], batch['crop'], batch['disease']
+```
+
+Each item also has `composition` and `filename`; pass the filenames to `save_predictions`. Other options:
+- `build_datasets(image_size=...)` changes the input size for a backbone that needs another resolution. Report the size used.
+- `build_datasets(use_validation=False)` gives the full 8,000 training images for a final retrain after model selection.
+- `balanced_sampler(datasets['train'].records)` draws rare compositions more often (square-root sampling). Pass it as `sampler=` with `shuffle=False`. Whether to use it is a modelling choice; document it.
+- `eval_transform()` and `load_image()` give the same preprocessing for the user interface.
+
 ## Evaluation
 
 All models are scored by `evaluate.py`, so results are comparable. It needs `numpy` and `matplotlib` (plots are skipped without matplotlib). Each model saves its scores for each split. Columns are indexed by the official IDs: 55 crops, 175 diseases, 333 compositions. Raw logits or softmax probabilities are both accepted.
@@ -139,7 +179,7 @@ Protocol:
 
 Share this project folder's scripts, requirements, README and `dataset/metadata`. Do not share `.venv-dataset`, archives, extracted images, generated prepared files or the machine-local setup state in Git. They are covered by this folder's `.gitignore`.
 
-Run the focused verification tests (dataset setup and evaluation) with:
+Run the focused verification tests (dataset setup, evaluation and preprocessing; the preprocessing tests are skipped without PyTorch) with:
 
 ```bat
 .venv-dataset\Scripts\python.exe -m unittest discover -s tests -v

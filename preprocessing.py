@@ -1,0 +1,114 @@
+"""Shared input pipeline: image loading, preprocessing, augmentation and PyTorch datasets for DPD-Small.
+
+All models use these transforms, so differences in results come from the models, not the input pipeline.
+"""
+from collections import Counter
+
+from PIL import Image, ImageOps
+import torch
+from torch.utils.data import Dataset, WeightedRandomSampler
+from torchvision import transforms as T
+
+from dataset_access import load_split, load_validation_split
+
+IMAGE_SIZE = 224
+RESIZE_RATIO = 0.875  # evaluation: resize the shorter side to 256, then centre-crop 224
+IMAGENET_MEAN = (0.485, 0.456, 0.406)
+IMAGENET_STD = (0.229, 0.224, 0.225)
+
+
+def load_image(path, min_size=None):
+    """Open an image as RGB with its EXIF orientation applied.
+
+    min_size lets the JPEG decoder skip full resolution (some images are 6000 px wide) while keeping
+    both sides at least that large, which makes loading much faster without changing the result visibly.
+    """
+    with Image.open(path) as image:
+        if min_size and image.format in ('JPEG', 'MPO'):
+            image.draft('RGB', (min_size, min_size))
+        return ImageOps.exif_transpose(image).convert('RGB')
+
+
+def train_transform(image_size=IMAGE_SIZE, mean=IMAGENET_MEAN, std=IMAGENET_STD):
+    """Training augmentation: random crop and scale, flips and mild colour jitter.
+
+    Hue jitter stays small because colour (yellowing, rust, mildew) is itself a disease symptom.
+    """
+    return T.Compose([
+        T.RandomResizedCrop(image_size, scale=(0.5, 1.0), antialias=True),
+        T.RandomHorizontalFlip(),
+        T.RandomVerticalFlip(),
+        T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.02),
+        T.ToTensor(),
+        T.Normalize(mean, std),
+    ])
+
+
+def eval_transform(image_size=IMAGE_SIZE, mean=IMAGENET_MEAN, std=IMAGENET_STD):
+    """Deterministic preprocessing for validation, test and the user interface."""
+    return T.Compose([
+        T.Resize(round(image_size / RESIZE_RATIO), antialias=True),
+        T.CenterCrop(image_size),
+        T.ToTensor(),
+        T.Normalize(mean, std),
+    ])
+
+
+def denormalise(tensor, mean=IMAGENET_MEAN, std=IMAGENET_STD):
+    """Undo Normalize for displaying an image tensor (C, H, W) or batch (N, C, H, W)."""
+    shape = (-1, 1, 1)
+    return (tensor * torch.tensor(std).view(shape) + torch.tensor(mean).view(shape)).clamp(0, 1)
+
+
+class DPDDataset(Dataset):
+    """Images with crop, disease and composition targets.
+
+    Each item is a dict: image, crop, disease, composition (official IDs) and filename, which
+    evaluate.save_predictions needs. The default DataLoader collate batches it.
+    """
+
+    def __init__(self, records, transform=None, image_size=IMAGE_SIZE):
+        self.records = records
+        self.transform = transform
+        self.min_size = round(image_size / RESIZE_RATIO)
+
+    def __len__(self):
+        return len(self.records)
+
+    def __getitem__(self, index):
+        record = self.records[index]
+        image = load_image(record['image_path'], self.min_size)
+        if self.transform:
+            image = self.transform(image)
+        return {'image': image, 'crop': record['crop_id'], 'disease': record['disease_id'],
+                'composition': record['composition_id'], 'filename': record['filename']}
+
+
+def build_datasets(image_size=IMAGE_SIZE, use_validation=True):
+    """Datasets for the official splits; train and val come from the shared validation manifest.
+
+    With use_validation=False, train is the full official train split (for a final retrain after model
+    selection) and there is no val entry.
+    """
+    if use_validation:
+        train, val = load_validation_split()
+    else:
+        train, val = load_split('train'), None
+    evaluation = eval_transform(image_size)
+    datasets = {'train': DPDDataset(train, train_transform(image_size), image_size),
+                'test_seen': DPDDataset(load_split('test_seen'), evaluation, image_size),
+                'test_unseen': DPDDataset(load_split('test_unseen'), evaluation, image_size)}
+    if val is not None:
+        datasets['val'] = DPDDataset(val, evaluation, image_size)
+    return datasets
+
+
+def balanced_sampler(records, key='composition_id', power=0.5, num_samples=None, generator=None):
+    """Oversample rare classes: each image is drawn with weight 1 / count(class) ** power.
+
+    power=0 is the natural distribution, 1 is fully class-balanced, 0.5 (square-root sampling) is a
+    middle ground that avoids repeating single-image compositions too often. Use with shuffle=False.
+    """
+    counts = Counter(record[key] for record in records)
+    weights = torch.tensor([counts[record[key]] ** -power for record in records], dtype=torch.double)
+    return WeightedRandomSampler(weights, num_samples or len(records), replacement=True, generator=generator)
