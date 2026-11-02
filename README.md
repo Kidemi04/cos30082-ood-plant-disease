@@ -98,11 +98,48 @@ Each prepared CSV has a header: `image_path,filename,crop_id,disease_id,composit
 - Keep original images. Resize, augmentation and normalization belong in each model's input pipeline and must be documented for fair comparisons.
 - Byte-identical images, if found, are listed in `validation_report.json`. They are reported without silently changing the lecturer's splits. Different encodings or near-duplicate images are not detected by this check.
 
+## Validation split
+
+The shared validation split is `dataset/metadata/validation_split.csv`: 1,221 training images, 15% of every composition with at least 3 training images (seed 30082). The 73 compositions with fewer than 3 images stay entirely in training. Do not regenerate it; everyone uses this file.
+
+```python
+from dataset_access import load_validation_split
+train, val = load_validation_split()   # 6,779 + 1,221 records
+```
+
+Use `val` for model selection and tuning. The test splits are for final results only.
+
+## Evaluation
+
+All models are scored by `evaluate.py`, so results are comparable. It needs `numpy` and `matplotlib` (plots are skipped without matplotlib). Each model saves its scores for each split. Columns are indexed by the official IDs: 55 crops, 175 diseases, 333 compositions. Raw logits or softmax probabilities are both accepted.
+
+```python
+from evaluate import save_predictions
+# Baselines (independent or multi-task): crop and disease heads.
+save_predictions('predictions/resnet50_multitask_test_seen.npz', filenames, crop=crop_logits, disease=disease_logits)
+# Models that score compositions directly, for example a vision-language model.
+save_predictions('predictions/clip_test_unseen.npz', filenames, composition=composition_logits)
+```
+
+Then run:
+
+```text
+python evaluate.py run --name resnet50_multitask --seen predictions/resnet50_multitask_test_seen.npz --unseen predictions/resnet50_multitask_test_unseen.npz
+python evaluate.py compare results/*/metrics.json
+```
+
+`results/<name>/` receives `metrics.json`, `summary.md` and the seen-test confusion matrices (CSV and PNG) at composition, crop and disease level. `compare` writes the report table to `results/comparison.md`. Use `--val` instead of the test flags while developing.
+
+Protocol:
+- **Generalised zero-shot:** seen and unseen test images are ranked against all 333 compositions. The model is not told which split an image comes from. Closed-set accuracy over only the 10 unseen compositions is reported separately as `composition_unseen_only`.
+- **Composition scores from two heads:** P(composition) = P(crop) × P(disease), renormalised over the 333 valid pairs. If a model gives only composition scores, crop and disease scores are its summed composition probabilities.
+- **Primary metric:** per-class mean accuracy. Seen-test classes range from 1 to 124 images, and `tomato_early_blight` is 33% of the unseen test set, so per-image accuracy would mostly measure a few large classes. Per-image accuracy is reported too. The harmonic mean is H = 2·S·U / (S + U), computed from seen and unseen composition accuracy, for Top-1 and Top-5.
+
 ## Git and checks
 
 Share this project folder's scripts, requirements, README and `dataset/metadata`. Do not share `.venv-dataset`, archives, extracted images, generated prepared files or the machine-local setup state in Git. They are covered by this folder's `.gitignore`.
 
-Run the focused verification tests with:
+Run the focused verification tests (dataset setup and evaluation) with:
 
 ```bat
 .venv-dataset\Scripts\python.exe -m unittest discover -s tests -v

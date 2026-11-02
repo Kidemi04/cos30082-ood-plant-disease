@@ -24,3 +24,7 @@ __pycache__/
 *.pt
 *.pth
 *.ckpt
+*.pdf
+
+# Model score files; results/ (metrics, confusion matrices) is tracked for the report.
+/predictions/

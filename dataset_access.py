@@ -27,5 +27,19 @@ def load_split(split, project_dir=PROJECT):
     return records
 
 
+def load_validation_split(project_dir=PROJECT):
+    """Return (train, validation) records from the official train split using the shared manifest."""
+    manifest = Path(project_dir) / 'dataset/metadata/validation_split.csv'
+    if not manifest.is_file():
+        raise FileNotFoundError('Run scripts/make_validation_split.py to create the shared validation manifest.')
+    with manifest.open(encoding='utf-8', newline='') as source:
+        held_out = {row['filename'] for row in csv.DictReader(source)}
+    records = load_split('train', project_dir)
+    validation = [record for record in records if record['filename'] in held_out]
+    if len(validation) != len(held_out):
+        raise ValueError('The validation manifest lists files outside the official train split.')
+    return [record for record in records if record['filename'] not in held_out], validation
+
+
 def load_labels(project_dir=PROJECT):
     return json.loads((Path(project_dir) / 'dataset/prepared/label_map.json').read_text(encoding='utf-8'))
