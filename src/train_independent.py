@@ -41,6 +41,10 @@ def build_model(backbone, num_classes, pretrained=True):
         model = models.convnext_tiny(weights='IMAGENET1K_V1' if pretrained else None)
         model.classifier[2] = nn.Linear(model.classifier[2].in_features, num_classes)
         return model, model.classifier[2]
+    if backbone == 'resnet50':
+        model = models.resnet50(weights='IMAGENET1K_V1' if pretrained else None)
+        model.fc = nn.Linear(model.fc.in_features, num_classes)
+        return model, model.fc
     if backbone == 'swin_t':
         model = models.swin_t(weights='IMAGENET1K_V1' if pretrained else None)
         model.head = nn.Linear(model.head.in_features, num_classes)
@@ -90,7 +94,7 @@ def validate(model, loader, target, device):
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a Baseline 1 crop or disease model.')
     parser.add_argument('--target', required=True, choices=sorted(NUM_CLASSES))
-    parser.add_argument('--backbone', default='convnext_tiny', choices=['convnext_tiny', 'swin_t'])
+    parser.add_argument('--backbone', default='convnext_tiny', choices=['convnext_tiny', 'resnet50', 'swin_t'])
     parser.add_argument('--balanced', action='store_true', help='draw rare target classes more often')
     parser.add_argument('--head-epochs', type=int, default=3)
     parser.add_argument('--epochs', type=int, default=30, help='maximum full-model epochs')
@@ -105,6 +109,7 @@ def parse_args():
     parser.add_argument('--num-workers', type=int, default=4)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--output-dir', type=Path, default=PROJECT / 'outputs')
+    parser.add_argument('--tag', help='suffix for the run folder, e.g. lr3e-4 for an ablation')
     return parser.parse_args()
 
 
@@ -137,6 +142,8 @@ def main():
         run_name += '_balanced'
     if final:
         run_name += '_final'
+    if args.tag:
+        run_name += f'_{args.tag}'
     run_dir = args.output_dir / f'{run_name}_seed{args.seed}'
     run_dir.mkdir(parents=True, exist_ok=True)
     config = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
