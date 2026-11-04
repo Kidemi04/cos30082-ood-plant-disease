@@ -1,0 +1,9 @@
+stage,epoch,lr,train_loss,val_top1_per_class,val_top5_per_class,val_top1_per_image,val_top5_per_image,seconds
+head,1,1.00e-03,2.9021,,,,,65
+head,2,7.50e-04,1.8433,,,,,38
+head,3,2.50e-04,1.6799,,,,,38
+full,1,1.00e-04,1.4640,,,,,48
+full,2,9.97e-05,1.2635,,,,,50
+full,3,9.89e-05,1.1593,,,,,47
+full,4,9.76e-05,1.0848,,,,,49
+full,5,9.57e-05,1.0467,,,,,47
