@@ -21,6 +21,7 @@ from pathlib import Path
 import sys
 import time
 
+import numpy as np
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
@@ -38,6 +39,20 @@ SIZES = {'crop': 55, 'disease': 175}
 
 
 LEARNING_RATES = {'convnext_tiny': 1e-4, 'vit_b_16': 3e-5}
+
+
+def save_scores(path, predictions):
+    """Save predictions; a single-head Baseline 1 network writes a partial file for `gzsl.py merge`.
+
+    evaluate.save_predictions only accepts complete files (composition, or crop and disease), so a crop-only or
+    disease-only file is written directly in the same format.
+    """
+    if 'composition' in predictions or {'crop', 'disease'} <= predictions.keys():
+        save_predictions(path, **predictions)
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(path, filenames=np.asarray([str(n) for n in predictions['filenames']]),
+                        **{k: np.asarray(v, dtype=np.float32) for k, v in predictions.items() if k != 'filenames'})
 
 
 class Heads(nn.Module):
@@ -133,14 +148,14 @@ def run(args):
                     break
     if args.stage == 'select':
         model.load_state_dict(torch.load(args.out / 'best.pth', map_location=device, weights_only=True)['model'])
-        save_predictions(args.out / 'pseudo.npz', **predict(model, eval_loader(data['pseudo'], args.batch_size,
-                                                                                 args.workers), device))
+        save_scores(args.out / 'pseudo.npz', predict(model, eval_loader(data['pseudo'], args.batch_size,
+                                                                         args.workers), device))
         summary = {'best_stage_epoch': best_epoch, 'best_val_top1_per_class': best}
     else:
         torch.save({'model': model.state_dict(), 'stage': 'final', 'epochs': args.final_epochs}, args.out / 'final.pth')
         for split in ('test_seen', 'test_unseen'):
-            save_predictions(args.out / f'{split}.npz',
-                             **predict(model, eval_loader(data[split], args.batch_size, args.workers), device))
+            save_scores(args.out / f'{split}.npz',
+                        predict(model, eval_loader(data[split], args.batch_size, args.workers), device))
         summary = {'final_full_epochs': args.final_epochs}
     (args.out / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
     print(summary)
