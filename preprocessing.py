@@ -15,6 +15,8 @@ IMAGE_SIZE = 224
 RESIZE_RATIO = 0.875  # evaluation: resize the shorter side to 256, then centre-crop 224
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
+CLIP_MEAN = (0.48145466, 0.4578275, 0.40821073)  # OpenAI CLIP and BioCLIP pretraining statistics
+CLIP_STD = (0.26862954, 0.26130258, 0.27577711)
 ORIENTATION = {2: Image.Transpose.FLIP_LEFT_RIGHT, 3: Image.Transpose.ROTATE_180, 4: Image.Transpose.FLIP_TOP_BOTTOM,
                5: Image.Transpose.TRANSPOSE, 6: Image.Transpose.ROTATE_270, 7: Image.Transpose.TRANSVERSE,
                8: Image.Transpose.ROTATE_90}  # EXIF orientation tag -> transpose that displays the image upright
@@ -90,18 +92,19 @@ class DPDDataset(Dataset):
                 'composition': record['composition_id'], 'filename': record['filename']}
 
 
-def build_datasets(image_size=IMAGE_SIZE, use_validation=True):
+def build_datasets(image_size=IMAGE_SIZE, use_validation=True, mean=IMAGENET_MEAN, std=IMAGENET_STD):
     """Datasets for the official splits; train and val come from the shared validation manifest.
 
     With use_validation=False, train is the full official train split (for a final retrain after model
-    selection) and there is no val entry.
+    selection) and there is no val entry. mean/std change only the final Normalize step, for backbones
+    pretrained with other statistics (for example CLIP_MEAN/CLIP_STD); every other step is unchanged.
     """
     if use_validation:
         train, val = load_validation_split()
     else:
         train, val = load_split('train'), None
-    evaluation = eval_transform(image_size)
-    datasets = {'train': DPDDataset(train, train_transform(image_size), image_size),
+    evaluation = eval_transform(image_size, mean, std)
+    datasets = {'train': DPDDataset(train, train_transform(image_size, mean, std), image_size),
                 'test_seen': DPDDataset(load_split('test_seen'), evaluation, image_size),
                 'test_unseen': DPDDataset(load_split('test_unseen'), evaluation, image_size)}
     if val is not None:

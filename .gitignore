@@ -28,3 +28,6 @@ __pycache__/
 
 # Model score files; results/ (metrics, confusion matrices) is tracked for the report.
 /predictions/
+
+# Local training runs (checkpoints, score files, logs); final metrics go to results/.
+/runs/
