@@ -11,6 +11,7 @@ Variants (for the ablations):
   --unfreeze N                  number of final image-encoder blocks to fine-tune (0 = frozen image encoder)
   --primitive-weight L          weight of the crop-only and disease-only prompt losses (0 = composition loss only)
   --heads                       control: same image encoder with linear crop/disease heads and no text
+  --augment standard | strong   training augmentation strength (strong = field-robustness variant)
 
 Stages:
   zeroshot  no training; predictions on the selection data (val_seen + pseudo_unseen)
@@ -183,7 +184,8 @@ def run(args):
     seed_everything(args.seed)
     device = torch.device('cuda')
     taxonomy = Taxonomy(load_labels())
-    data = make_datasets('select' if args.stage in ('zeroshot', 'select') else 'final', CLIP_MEAN, CLIP_STD)
+    data = make_datasets('select' if args.stage in ('zeroshot', 'select') else 'final', CLIP_MEAN, CLIP_STD,
+                         augment=args.augment)
     model = CompositionalCLIP(args.backbone, taxonomy, args.tokens, args.unfreeze, args.heads).to(device)
     args.out.mkdir(parents=True, exist_ok=True)
     trainable = [p for p in model.parameters() if p.requires_grad]
@@ -303,6 +305,8 @@ def main():
     parser.add_argument('--unfreeze', type=int, default=4)
     parser.add_argument('--primitive-weight', type=float, default=1.0)
     parser.add_argument('--heads', action='store_true', help='Control: linear crop/disease heads, no text.')
+    parser.add_argument('--augment', choices=('standard', 'strong'), default='standard',
+                        help='Training augmentation strength (strong = field-robustness variant).')
     parser.add_argument('--epochs', type=int, default=15)
     parser.add_argument('--final-epochs', type=int)
     parser.add_argument('--patience', type=int, default=4)

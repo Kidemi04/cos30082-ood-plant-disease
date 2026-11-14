@@ -37,18 +37,40 @@ def load_image(path, min_size=None):
         return image.transpose(method) if method else image
 
 
-def train_transform(image_size=IMAGE_SIZE, mean=IMAGENET_MEAN, std=IMAGENET_STD):
+AUGMENT_STRENGTHS = ('standard', 'strong')
+
+
+def train_transform(image_size=IMAGE_SIZE, mean=IMAGENET_MEAN, std=IMAGENET_STD, strength='standard'):
     """Training augmentation: random crop and scale, flips and mild colour jitter.
 
     Hue jitter stays small because colour (yellowing, rust, mildew) is itself a disease symptom.
+
+    strength='strong' is the field-robustness variant (Member E): tighter random crops (viewpoint, framing),
+    stronger lighting and contrast changes, perspective warps, occasional blur (focus, camera shake) and
+    random erasing (occlusion, busy backgrounds). Hue jitter stays at 0.02 for the same reason as above.
+    The default 'standard' pipeline is unchanged.
     """
+    if strength not in AUGMENT_STRENGTHS:
+        raise ValueError(f'strength must be one of {AUGMENT_STRENGTHS}, got {strength!r}')
+    if strength == 'standard':
+        return T.Compose([
+            T.RandomResizedCrop(image_size, scale=(0.5, 1.0), antialias=True),
+            T.RandomHorizontalFlip(),
+            T.RandomVerticalFlip(),
+            T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.02),
+            T.ToTensor(),
+            T.Normalize(mean, std),
+        ])
     return T.Compose([
-        T.RandomResizedCrop(image_size, scale=(0.5, 1.0), antialias=True),
+        T.RandomResizedCrop(image_size, scale=(0.25, 1.0), antialias=True),
         T.RandomHorizontalFlip(),
         T.RandomVerticalFlip(),
-        T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.02),
+        T.RandomPerspective(distortion_scale=0.3, p=0.3),
+        T.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.4, hue=0.02),
+        T.RandomApply([T.GaussianBlur(kernel_size=9, sigma=(0.1, 2.0))], p=0.3),
         T.ToTensor(),
         T.Normalize(mean, std),
+        T.RandomErasing(p=0.25, scale=(0.02, 0.15), value='random'),
     ])
 
 
