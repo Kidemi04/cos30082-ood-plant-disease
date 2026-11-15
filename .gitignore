@@ -31,3 +31,4 @@ __pycache__/
 
 # Local training runs (checkpoints, score files, logs); final metrics go to results/.
 /runs/
+.vscode/

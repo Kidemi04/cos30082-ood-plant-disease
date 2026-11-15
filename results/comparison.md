@@ -12,6 +12,8 @@
 | clip_bioclip_full_raw | 54.91 | 9.09 | 15.60 | 79.40 | 59.10 | 67.76 | 12.46 |
 | clip_bioclip_heads_calibrated | 47.40 | 67.23 | 55.60 | 75.44 | 97.74 | 85.15 | 66.55 |
 | clip_bioclip_heads_raw | 58.63 | 2.85 | 5.43 | 81.19 | 33.03 | 46.95 | 7.34 |
+| clip_bioclip_heads_strong_calibrated | 45.41 | 67.75 | 54.38 | 76.13 | 97.04 | 85.33 | 66.13 |
+| clip_bioclip_heads_strong_raw | 57.74 | 3.45 | 6.51 | 83.60 | 26.87 | 40.66 | 6.96 |
 | clip_bioclip_noprim_calibrated | 50.57 | 48.97 | 49.76 | 71.51 | 91.51 | 80.28 | 52.61 |
 | clip_bioclip_noprim_raw | 55.79 | 6.95 | 12.36 | 78.76 | 49.38 | 60.70 | 11.90 |
 

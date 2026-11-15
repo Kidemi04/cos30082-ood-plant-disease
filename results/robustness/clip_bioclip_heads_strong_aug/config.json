@@ -1,0 +1,107 @@
+{
+  "run": "runs/clip_bioclip_heads_strong_final",
+  "gamma": 6.1,
+  "seed": 30082,
+  "limit": null,
+  "model_config": {
+    "stage": "final",
+    "out": "runs\\clip_bioclip_heads_strong_final",
+    "backbone": "bioclip",
+    "tokens": "learned",
+    "unfreeze": 4,
+    "primitive_weight": 1.0,
+    "heads": true,
+    "augment": "strong",
+    "epochs": 15,
+    "final_epochs": 15,
+    "patience": 4,
+    "lr": 1e-05,
+    "token_lr": 5e-05,
+    "token_wd": 0.01,
+    "batch_size": 32,
+    "workers": 4,
+    "seed": 42,
+    "backbone_weights": [
+      "hf-hub:imageomics/bioclip",
+      null
+    ],
+    "image_size": 224,
+    "normalisation": "CLIP",
+    "context_length": 32,
+    "name_words": {
+      "pepper_bell": "bell pepper",
+      "paddy": "rice",
+      "aphis_spp": "aphids",
+      "xamthomonas": "xanthomonas",
+      "crinckle": "crinkle",
+      "verticulium_wilt": "verticillium wilt",
+      "leafblast": "leaf blast",
+      "monillia_laxa": "monilinia laxa",
+      "insects_damages": "insect damage"
+    },
+    "prompt_example": null,
+    "trainable_parameters": 28864230,
+    "train_images": 8000,
+    "gpu": "NVIDIA GeForce RTX 2070",
+    "torch": "2.14.1+cu126"
+  },
+  "distortions": {
+    "dark": [
+      0.6,
+      0.4,
+      0.25
+    ],
+    "bright": [
+      1.4,
+      1.8,
+      2.3
+    ],
+    "low_contrast": [
+      0.6,
+      0.4,
+      0.25
+    ],
+    "gaussian_blur": [
+      1.0,
+      2.0,
+      3.5
+    ],
+    "motion_blur": [
+      7,
+      13,
+      21
+    ],
+    "gaussian_noise": [
+      10,
+      20,
+      35
+    ],
+    "jpeg": [
+      30,
+      15,
+      7
+    ],
+    "low_resolution": [
+      112,
+      64,
+      40
+    ],
+    "occlusion": [
+      0.05,
+      0.12,
+      0.25
+    ],
+    "rotation": [
+      15,
+      30,
+      45
+    ]
+  },
+  "held_out": [
+    "gaussian_noise",
+    "jpeg",
+    "low_resolution",
+    "motion_blur",
+    "rotation"
+  ]
+}

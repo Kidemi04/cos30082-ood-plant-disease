@@ -85,7 +85,8 @@ def sweep(seen_log_p, seen_records, unseen_log_p, unseen_records, seen):
         rows.append({'gamma': float(gamma), 'seen': s, 'unseen': u, 'harmonic': harmonic_mean(s, u)})
     best = max(rows, key=lambda row: (round(row['harmonic'], 6), -row['gamma']))
     points = sorted({(r['unseen'], r['seen']) for r in rows} | {(0.0, rows[0]['seen'])})
-    ausuc = float(np.trapezoid([p[1] for p in points], [p[0] for p in points])) if len(points) > 1 else 0.0
+    trapezoid = getattr(np, 'trapezoid', None) or np.trapz  # NumPy 2 renamed trapz to trapezoid
+    ausuc = float(trapezoid([p[1] for p in points], [p[0] for p in points])) if len(points) > 1 else 0.0
     return rows, best, ausuc
 
 
