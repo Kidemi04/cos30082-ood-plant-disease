@@ -4,7 +4,7 @@ The CLIP image encoder never changes during CSP training, so every image is enco
 gets a clean view (the shared evaluation transform with CLIP's normalisation); training images also get
 augmented views (the shared training transform), and CSP training draws one view per image per epoch.
 
-    python src\csp_features.py
+    python src\csp_features.py [--backbone bioclip]
 
 writes the feature cache (all splits) and the training-image embeddings (8,000 images) to outputs/clip_features/.
 """
@@ -18,12 +18,20 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from csp_model import CLIP_MODEL, CLIP_WEIGHTS, image_normalisation, load_clip  # noqa: E402
+from csp_model import BACKBONES, CLIP_MODEL, CLIP_WEIGHTS, backbone_slug, image_normalisation, load_clip  # noqa: E402
 from dataset_access import PROJECT, load_split  # noqa: E402
 from preprocessing import DPDDataset, eval_transform, train_transform  # noqa: E402
 
-FEATURES = PROJECT / f'outputs/clip_features/{CLIP_MODEL}_{CLIP_WEIGHTS}.pt'
-TRAIN_EMBEDDINGS = PROJECT / f'outputs/clip_features/{CLIP_MODEL}_{CLIP_WEIGHTS}_train_embeddings.npz'
+
+def feature_path(model_name=CLIP_MODEL, weights=CLIP_WEIGHTS):
+    return PROJECT / f'outputs/clip_features/{backbone_slug(model_name, weights)}.pt'
+
+
+def train_embeddings_path(model_name=CLIP_MODEL, weights=CLIP_WEIGHTS):
+    return PROJECT / f'outputs/clip_features/{backbone_slug(model_name, weights)}_train_embeddings.npz'
+
+
+FEATURES, TRAIN_EMBEDDINGS = feature_path(), train_embeddings_path()
 
 
 @torch.no_grad()
@@ -38,10 +46,11 @@ def encode_images(clip_model, records, transform, device, batch_size=128, num_wo
     return torch.cat(features).half()
 
 
-def build_feature_cache(path=FEATURES, augmented_views=4, seed=0, num_workers=4):
+def build_feature_cache(path=FEATURES, augmented_views=4, seed=0, num_workers=4, model_name=CLIP_MODEL,
+                        weights=CLIP_WEIGHTS):
     """Encode the official train split (clean + augmented views) and both test splits (clean) once."""
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    clip_model, _ = load_clip(device)
+    clip_model, _ = load_clip(device, model_name, weights)
     mean, std = image_normalisation(clip_model)
     train = load_split('train')  # all 8,000 training images; the shared validation split is a subset
     records = train + load_split('test_seen') + load_split('test_unseen')
@@ -49,7 +58,7 @@ def build_feature_cache(path=FEATURES, augmented_views=4, seed=0, num_workers=4)
     if len(set(filenames)) != len(filenames):
         raise ValueError('Filenames must be unique across splits.')
 
-    print(f'Encoding {len(records)} images (clean view) with {CLIP_MODEL} on {device}', flush=True)
+    print(f'Encoding {len(records)} images (clean view) with {model_name} on {device}', flush=True)
     clean = encode_images(clip_model, records, eval_transform(mean=mean, std=std), device, num_workers=num_workers)
     torch.manual_seed(seed)
     augmented = []
@@ -57,7 +66,7 @@ def build_feature_cache(path=FEATURES, augmented_views=4, seed=0, num_workers=4)
         print(f'Encoding {len(train)} training images (augmented view {view + 1}/{augmented_views})', flush=True)
         augmented.append(encode_images(clip_model, train, train_transform(mean=mean, std=std), device,
                                        num_workers=num_workers))
-    cache = {'clip_model': CLIP_MODEL, 'clip_weights': CLIP_WEIGHTS, 'filenames': filenames, 'clean': clean,
+    cache = {'clip_model': model_name, 'clip_weights': weights, 'filenames': filenames, 'clean': clean,
              'augmented': torch.stack(augmented) if augmented else clean.new_empty(0, len(train), clean.shape[1])}
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(cache, path)
@@ -87,7 +96,12 @@ class FeatureCache:
 def save_training_embeddings(cache, path=TRAIN_EMBEDDINGS):
     """Save L2-normalised CLIP embeddings of all 8,000 training images with their paths and labels."""
     train = load_split('train')
-    embeddings = F.normalize(cache.features(train)[0].float(), dim=-1)
+    return write_embeddings(path, train, cache.features(train)[0])
+
+
+def write_embeddings(path, train, features):
+    """Save features of the official train split (record order) for nearest-neighbour lookup."""
+    embeddings = F.normalize(features.float(), dim=-1)
     np.savez_compressed(path, embeddings=embeddings.half().numpy(),
                         filenames=np.array([record['filename'] for record in train]),
                         image_paths=np.array([Path(record['image_path']).relative_to(PROJECT).as_posix()
@@ -114,13 +128,15 @@ def nearest_training_images(query, bank, k=3):
 
 def main():
     parser = argparse.ArgumentParser(description='Cache CLIP image features for CSP and the UI.')
+    parser.add_argument('--backbone', default='openai', choices=sorted(BACKBONES))
     parser.add_argument('--augmented-views', type=int, default=4, help='augmented views per training image')
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--num-workers', type=int, default=4)
     args = parser.parse_args()
-    build_feature_cache(FEATURES, args.augmented_views, args.seed, args.num_workers)
-    cache = FeatureCache(FEATURES)
-    print(f'Saved {FEATURES}\nSaved {save_training_embeddings(cache)}')
+    model_name, weights = BACKBONES[args.backbone]
+    path = feature_path(model_name, weights)
+    build_feature_cache(path, args.augmented_views, args.seed, args.num_workers, model_name, weights)
+    print(f'Saved {path}\nSaved {save_training_embeddings(FeatureCache(path), train_embeddings_path(model_name, weights))}')
 
 
 if __name__ == '__main__':

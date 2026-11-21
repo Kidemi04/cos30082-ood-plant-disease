@@ -21,8 +21,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from dataset_access import load_labels  # noqa: E402
 from evaluate import Taxonomy  # noqa: E402
 
-CLIP_MODEL = 'ViT-B-16-quickgelu'  # OpenAI's weights were trained with QuickGELU; plain ViT-B-16 uses GELU
-CLIP_WEIGHTS = 'openai'
+# (open_clip model name, pretrained tag). OpenAI's weights were trained with QuickGELU, so not plain ViT-B-16;
+# BioCLIP (ViT-B/16 trained on the TreeOfLife-10M biology images) loads its weights from the Hugging Face hub.
+BACKBONES = {'openai': ('ViT-B-16-quickgelu', 'openai'), 'bioclip': ('hf-hub:imageomics/bioclip', None)}
+CLIP_MODEL, CLIP_WEIGHTS = BACKBONES['openai']
 TEMPLATE = 'a photo of x x'  # the two placeholder words become the disease and crop embeddings
 
 
@@ -31,6 +33,11 @@ def load_clip(device, model_name=CLIP_MODEL, weights=CLIP_WEIGHTS):
     model = open_clip.create_model(model_name, pretrained=weights)
     model.eval().requires_grad_(False).to(device)
     return model, open_clip.get_tokenizer(model_name)
+
+
+def backbone_slug(model_name=CLIP_MODEL, weights=CLIP_WEIGHTS):
+    """A file-name-safe name for a backbone, e.g. ViT-B-16-quickgelu_openai or imageomics-bioclip_hub."""
+    return f'{model_name.replace("hf-hub:", "").replace("/", "-")}_{weights or "hub"}'
 
 
 def image_normalisation(clip_model):
@@ -114,8 +121,14 @@ def load_csp(path, device):
     """Rebuild a trained CSP model, in eval mode, from a checkpoint saved by train_csp.py."""
     checkpoint = torch.load(path, map_location='cpu', weights_only=True)
     clip_model, tokenizer = load_clip(device, checkpoint['clip_model'], checkpoint['clip_weights'])
+    if 'clip_state' in checkpoint:  # fine-tuned CLIP weights from finetune_csp.py
+        unexpected = clip_model.load_state_dict(checkpoint['clip_state'], strict=False).unexpected_keys
+        if unexpected:
+            raise ValueError(f'Unexpected CLIP weights in {path}: {unexpected[:3]}')
     model = CSP(clip_model, tokenizer, dropout=checkpoint['dropout'])
     with torch.no_grad():
         model.disease_embeddings.copy_(checkpoint['disease_embeddings'])
         model.crop_embeddings.copy_(checkpoint['crop_embeddings'])
+    model.backbone = (checkpoint['clip_model'], checkpoint['clip_weights'])
+    model.finetuned = 'clip_state' in checkpoint  # its image features differ from the frozen-CLIP cache
     return model.eval()
