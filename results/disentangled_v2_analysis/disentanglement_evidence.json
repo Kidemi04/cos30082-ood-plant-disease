@@ -1,0 +1,60 @@
+{
+  "test_combined_b2_select": {
+    "num_diseases_evaluated": 42,
+    "total_cross_crop_pairs": 114415,
+    "same_disease_diff_crop_macro": 0.10288077433232495,
+    "same_disease_diff_crop_micro": 0.1055938432766007,
+    "same_crop_diff_disease_macro": 0.17687364423181862,
+    "disentanglement_margin": -0.07399286989949366
+  },
+  "test_combined_v2_final_zdisease": {
+    "num_diseases_evaluated": 42,
+    "total_cross_crop_pairs": 114415,
+    "same_disease_diff_crop_macro": 0.263727550838318,
+    "same_disease_diff_crop_micro": 0.336159866193122,
+    "same_crop_diff_disease_macro": 0.18511340693415454,
+    "disentanglement_margin": 0.07861414390416346
+  },
+  "test_combined_v2_final_backbone": {
+    "num_diseases_evaluated": 42,
+    "total_cross_crop_pairs": 114415,
+    "same_disease_diff_crop_macro": 0.16772157423942793,
+    "same_disease_diff_crop_micro": 0.14768052218544656,
+    "same_crop_diff_disease_macro": 0.25160104044092196,
+    "disentanglement_margin": -0.08387946620149403
+  },
+  "test_orthogonality_mean_abs_cos_zcrop_zdisease": 0.027148589491844177,
+  "test_orthogonality_mean_sq_cos_zcrop_zdisease": 0.0012079692678526044,
+  "pseudo_b2_select": {
+    "num_diseases_evaluated": 34,
+    "total_cross_crop_pairs": 36046,
+    "same_disease_diff_crop_macro": 0.11898901627391242,
+    "same_disease_diff_crop_micro": 0.1704084909312435,
+    "same_crop_diff_disease_macro": 0.19267054088413715,
+    "disentanglement_margin": -0.07368152461022473
+  },
+  "pseudo_v2_select_zdisease": {
+    "num_diseases_evaluated": 34,
+    "total_cross_crop_pairs": 36046,
+    "same_disease_diff_crop_macro": 0.3251915303931952,
+    "same_disease_diff_crop_micro": 0.6191914951525815,
+    "same_crop_diff_disease_macro": 0.1812782784603769,
+    "disentanglement_margin": 0.14391325193281831
+  },
+  "train_b2_select": {
+    "num_diseases_evaluated": 42,
+    "total_cross_crop_pairs": 1309269,
+    "same_disease_diff_crop_macro": 0.17071290198914768,
+    "same_disease_diff_crop_micro": 0.21038710138388245,
+    "same_crop_diff_disease_macro": 0.21500572484607497,
+    "disentanglement_margin": -0.04429282285692729
+  },
+  "train_v2_final_zdisease": {
+    "num_diseases_evaluated": 42,
+    "total_cross_crop_pairs": 1309269,
+    "same_disease_diff_crop_macro": 0.5994439486478179,
+    "same_disease_diff_crop_micro": 0.8396810982817803,
+    "same_crop_diff_disease_macro": 0.14127942699269624,
+    "disentanglement_margin": 0.45816452165512167
+  }
+}

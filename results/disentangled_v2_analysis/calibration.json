@@ -1,0 +1,17 @@
+{
+  "gamma": 5.8,
+  "pseudo_at_gamma": {
+    "gamma": 5.8,
+    "seen": 0.5118643875077333,
+    "unseen": 0.4644434352109671,
+    "harmonic": 0.4870022526998558
+  },
+  "pseudo_at_zero": {
+    "gamma": 0.0,
+    "seen": 0.685591673221783,
+    "unseen": 0.01818181818181818,
+    "harmonic": 0.03542419060037696
+  },
+  "pseudo_ausuc": 0.3412861951326317,
+  "source": "/content/runs/v2_g3_logit_adj/pseudo.npz"
+}
