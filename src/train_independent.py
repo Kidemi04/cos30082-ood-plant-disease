@@ -12,6 +12,10 @@ Once the best epoch is known, retrain on the full official train split (train + 
 that full-model epoch. The learning-rate schedule is unchanged, so it matches the selection run:
     python src\train_independent.py --target crop --balanced --final-epochs 10
 This writes final.pth instead of best.pth.
+
+To choose the calibrated-stacking gamma without test labels, repeat the final run without the 10
+pseudo-unseen pairs (pseudo_unseen.py) and score it on the pseudo-unseen validation split:
+    python src\train_independent.py --target crop --balanced --final-epochs 10 --pseudo-unseen
 """
 import argparse
 import csv
@@ -30,7 +34,8 @@ from torchvision import models
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from dataset_access import PROJECT  # noqa: E402
 from evaluate import TOP_K, accuracy, top_k_hits  # noqa: E402
-from preprocessing import balanced_sampler, build_datasets  # noqa: E402
+from preprocessing import DPDDataset, balanced_sampler, build_datasets, train_transform  # noqa: E402
+from pseudo_unseen import load_pseudo_unseen_split  # noqa: E402
 
 NUM_CLASSES = {'crop': 55, 'disease': 175}
 
@@ -110,7 +115,12 @@ def parse_args():
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--output-dir', type=Path, default=PROJECT / 'outputs')
     parser.add_argument('--tag', help='suffix for the run folder, e.g. lr3e-4 for an ablation')
-    return parser.parse_args()
+    parser.add_argument('--pseudo-unseen', action='store_true',
+                        help='with --final-epochs: train without the pseudo-unseen pairs, to choose gamma')
+    args = parser.parse_args()
+    if args.pseudo_unseen and args.final_epochs is None:
+        parser.error('--pseudo-unseen repeats a final run, so it needs --final-epochs')
+    return args
 
 
 def main():
@@ -121,7 +131,10 @@ def main():
     num_classes = NUM_CLASSES[args.target]
     final = args.final_epochs is not None
 
-    datasets = build_datasets(use_validation=not final)
+    if args.pseudo_unseen:  # the shared train split minus the 10 held-out pairs; no validation needed
+        datasets = {'train': DPDDataset(load_pseudo_unseen_split()['train'], train_transform())}
+    else:
+        datasets = build_datasets(use_validation=not final)
     generator = torch.Generator().manual_seed(args.seed)
     loader_args = {'batch_size': args.batch_size, 'num_workers': args.num_workers,
                    'pin_memory': device.type == 'cuda', 'persistent_workers': args.num_workers > 0}
@@ -140,6 +153,8 @@ def main():
     run_name = f'baseline1_{args.target}_{args.backbone}'
     if args.balanced:
         run_name += '_balanced'
+    if args.pseudo_unseen:
+        run_name += '_pseudo'
     if final:
         run_name += '_final'
     if args.tag:
