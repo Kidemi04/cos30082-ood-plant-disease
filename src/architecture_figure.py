@@ -46,7 +46,7 @@ def heading(axis, top, model, title, summary):
 
 def baseline1(axis, top):
     heading(axis, top, 'Baseline 1', '(a) Baseline 1: two independent CNNs',
-            'Trained: both networks, 55.8M parameters  ·  Test H 15.8%')
+            'Trained: both networks, 55.8M parameters  ·  Test H 46.3% calibrated (15.8% without)')
     upper, lower, middle = top - 10, top - 21, top - 15.5
     image = box(axis, 2, middle, 11, 'Leaf image\n224 × 224', 'data')
     for y, classes, name in ((upper, 55, 'crop'), (lower, 175, 'disease')):
@@ -105,9 +105,11 @@ def main():
     axis.axis('off')
     baseline1(axis, 98)
     clip_model(axis, 66, 'CSP', '(b) CSP: frozen CLIP + learned crop and disease words',
-               'Trained: only the 230 word vectors, 117,760 numbers  ·  Test H 21.7%', 'frozen', 'frozen')
+               'Trained: only the 230 word vectors, 117,760 numbers  ·  Test H 43.1% calibrated (21.7% without)',
+               'frozen', 'frozen')
     clip_model(axis, 34, 'CSP + WiSE-FT', '(c) CSP + WiSE-FT: fine-tuned CLIP blended with CSP (final model)',
-               'Trained: CLIP layers + word vectors (124.4M), then blended 0.5 × (b) + 0.5 × fine-tuned  ·  Test H 28.5%',
+               'Trained: CLIP layers + words (124.4M), blended 0.5 × (b) + 0.5 × fine-tuned  ·  '
+               'Test H 52.8% calibrated (28.5% without)',
                'trained', 'fine-tuned + WiSE-FT')
     legend(axis, 2.5)
     OUT.mkdir(parents=True, exist_ok=True)
