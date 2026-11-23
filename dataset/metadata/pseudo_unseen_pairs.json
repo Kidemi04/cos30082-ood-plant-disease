@@ -1,0 +1,27 @@
+{
+  "rule": "10 seen pairs, not healthy, >= 20 official training images, distinct crops and diseases, each crop and disease kept in other training pairs; random.Random(30082)",
+  "composition_ids": [
+    10,
+    68,
+    112,
+    129,
+    193,
+    216,
+    233,
+    240,
+    280,
+    311
+  ],
+  "pairs": {
+    "apple_rust": 137,
+    "cassava_brown_spot": 44,
+    "corn_leaf_blight": 69,
+    "cotton_target_spot": 26,
+    "paddy_bacterial_blight": 26,
+    "peach_bacterial_spot": 74,
+    "pear_spot": 24,
+    "potato_early_blight": 99,
+    "sugarcane_yellowing": 21,
+    "tomato_powdery_mildew": 36
+  }
+}
