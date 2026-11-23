@@ -1,0 +1,11 @@
+composition_id,composition_name,crop_id,disease_id,train_images
+15,apple_scab,0,15,57
+44,blackgram_anthracnose,6,18,14
+87,cherry_powdery_mildew,16,14,42
+103,coffee_rust,19,10,44
+114,corn_spot,21,56,59
+148,grape_leaf_blight,27,72,40
+193,paddy_bacterial_blight,33,46,26
+212,papaya_curl,35,57,14
+253,rose_downy_mildew,43,28,11
+302,tomato_brown_spot,51,4,31
