@@ -31,4 +31,7 @@ __pycache__/
 
 # Local training runs (checkpoints, score files, logs); final metrics go to results/.
 /runs/
+
+# UI assets built from the dataset (thumbnails, embeddings): rebuild with ui/build_index.py.
+/ui/assets/
 .vscode/
