@@ -16,5 +16,9 @@
 | clip_bioclip_heads_strong_raw | 57.74 | 3.45 | 6.51 | 83.60 | 26.87 | 40.66 | 6.96 |
 | clip_bioclip_noprim_calibrated | 50.57 | 48.97 | 49.76 | 71.51 | 91.51 | 80.28 | 52.61 |
 | clip_bioclip_noprim_raw | 55.79 | 6.95 | 12.36 | 78.76 | 49.38 | 60.70 | 11.90 |
+| disentangled_v1_calibrated | 42.92 | 50.06 | 46.22 | 67.51 | 87.05 | 76.04 | 59.38 |
+| disentangled_v1_raw | 50.83 | 6.23 | 11.11 | 73.44 | 33.99 | 46.47 | 12.43 |
+| disentangled_v2_calibrated | 44.68 | 61.38 | 51.71 | 68.68 | 94.65 | 79.60 | 58.92 |
+| disentangled_v2_raw | 55.02 | 4.94 | 9.07 | 75.74 | 28.76 | 41.69 | 10.36 |
 
 Composition accuracy (%), per-class mean, ranked against all 333 compositions.

@@ -1,0 +1,21 @@
+{
+  "command": "train",
+  "output": "outputs\\baseline2_final_seed42",
+  "batch_size": 32,
+  "workers": 4,
+  "head_epochs": 3,
+  "epochs": 30,
+  "patience": 5,
+  "seed": 42,
+  "final_head_epochs": 3,
+  "final_full_epochs": 15,
+  "backbone": "convnext_tiny",
+  "weights": "IMAGENET1K_V1",
+  "image_size": 224,
+  "loss": "crop CE + disease CE",
+  "label_smoothing": 0.1,
+  "sampler": "composition_id square-root",
+  "device": "cuda",
+  "train_images": 8000,
+  "parameters": 27996998
+}
