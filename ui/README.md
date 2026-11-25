@@ -6,7 +6,8 @@ Gradio app for the COS30082 OOD plant disease project. Upload a leaf photo and i
 - the **Top 5** pairs;
 - the **most similar training images**: the closest photos of the predicted pair, or for an unseen pair,
   the closest same-crop and same-disease photos;
-- a **Compare models** tab that runs both baselines and all three proposed approaches on the same photo.
+- a **Compare models** tab that runs both baselines and the proposed approaches (BioCLIP heads with standard and with
+  strong augmentation, Disentangled v2, CSP + WiSE-FT) on the same photo.
 
 Scores use the same calibration (gamma) as the reported results, so the UI agrees with `results/`.
 
@@ -38,15 +39,17 @@ It opens http://127.0.0.1:7860. The first launch loads the proposed model (a few
 
 - **Different proposed run:** change `models.proposed.run` in `config.json`, then rebuild `assets/`
   (the similar-images search uses the proposed model's image encoder).
-- **Baseline gamma values:** set `gamma` for `baseline1` / `baseline2` in `config.json`.
-  Until then they run uncalibrated and the UI says so.
+- **Gamma values:** each model's `gamma` is in `config.json` (a number, or the run's `calibration.json`).
+  A model with `"gamma": null` runs uncalibrated and the UI says so.
+- **Results table:** each model's `results` entry holds its calibrated test numbers and their source file.
 
 ## Needed on the demo machine
 
 - The repo, including `src/` (with `train_disentangled_v2.py` and `csp_model.py` from main), `evaluate.py`,
   `preprocessing.py` and `dataset_access.py`
 - The model folders in `runs/` (not in git):
-  - `clip_bioclip_heads_strong_final/` (BioCLIP heads)
+  - `clip_bioclip_heads_strong_final/` (BioCLIP heads + strong augmentation)
+  - `clip_bioclip_heads_final/` (BioCLIP heads, standard augmentation)
   - `disentangled_v2_final_seed42/` (Disentangled v2)
   - `csp_wiseft_vit_b16_final_seed42/` (CSP + WiSE-FT)
   - `baseline1_crop_convnext_tiny_balanced_final_seed42/`, `baseline1_disease_convnext_tiny_balanced_final_seed42/`
@@ -58,4 +61,4 @@ It opens http://127.0.0.1:7860. The first launch loads the proposed model (a few
   - `models--imageomics--bioclip` (BioCLIP heads)
   - `models--timm--vit_base_patch16_clip_224.openai` (CSP + WiSE-FT)
 
-With all five models loaded the app uses about 1.7 GB of GPU memory (measured), which fits the 4 GB RTX 2050.
+With all six models loaded the app uses about 2.3 GB of GPU memory (measured), which fits the 4 GB RTX 2050.

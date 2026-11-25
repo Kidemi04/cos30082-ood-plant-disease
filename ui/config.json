@@ -3,8 +3,8 @@
   "index_model": "proposed",
   "models": {
     "proposed": {
-      "label": "Proposed · BioCLIP heads, field-robust",
-      "short": "BioCLIP heads",
+      "label": "Proposed · BioCLIP heads + strong aug. (field-robust)",
+      "short": "BioCLIP heads + strong aug.",
       "arch": "BioCLIP image encoder · strong augmentation",
       "group": "proposed",
       "kind": "clip",
@@ -16,6 +16,22 @@
         "h": 54.38,
         "h5": 85.33,
         "source": "results/comparison.md (clip_bioclip_heads_strong_calibrated)"
+      }
+    },
+    "bioclip_standard": {
+      "label": "Proposed · BioCLIP heads (standard aug.)",
+      "short": "BioCLIP heads",
+      "arch": "BioCLIP image encoder · standard augmentation",
+      "group": "proposed",
+      "kind": "clip",
+      "run": "runs/clip_bioclip_heads_final",
+      "gamma": "calibration.json",
+      "results": {
+        "seen": 47.4,
+        "unseen": 67.23,
+        "h": 55.6,
+        "h5": 85.15,
+        "source": "results/comparison.md (clip_bioclip_heads_calibrated)"
       }
     },
     "disentangled": {
