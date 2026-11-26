@@ -1,0 +1,112 @@
+/* Plant disease UI — mixed design (canvas: "Mixed design (recommended)"). Montserrat 400/700 is bundled with Gradio. */
+.gradio-container { max-width: 1280px !important; margin: 0 auto !important; }
+footer { opacity: 0.6; }
+
+/* top bar */
+#pd-top { align-items: center; background: #FFFFFF; border: 1px solid #DDE2DA; border-radius: 14px; padding: 8px 16px; }
+#pd-header { flex: 1 1 auto; }
+#pd-top .form { overflow: visible !important; }
+#pd-model input { text-overflow: ellipsis; }
+.pd-brand { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pd-brand h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: #17201B; }
+.pd-brand p { margin: 0; font-size: 13px; color: #56615A; }
+.pd-logo { width: 40px; height: 40px; border-radius: 10px; background: #1F6B45; display: flex; align-items: center; justify-content: center; }
+.pd-chip { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 999px; margin-left: auto; }
+.pd-chip-blue { color: #1D4F86; background: #E3ECF7; }
+
+/* tabs as a segmented control */
+#pd-tabs .tab-wrapper, #pd-tabs [role="tablist"] { border: none; }
+#pd-tabs button[role="tab"] { font-weight: 700; font-size: 14px; border-radius: 8px; padding: 8px 16px; }
+#pd-tabs button[role="tab"][aria-selected="true"] { background: #FFFFFF; color: #17201B; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+#pd-run { min-height: 48px; font-size: 15px; font-weight: 700; }
+.pd-caption p { font-size: 12px !important; color: #56615A !important; margin: 0 !important; }
+
+/* cards */
+.pd-card { background: #FFFFFF; border: 1px solid #DDE2DA; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 14px; color: #17201B; margin-bottom: 16px; }
+.pd-tight { gap: 6px; padding: 16px 20px; }
+.pd-card p { margin: 0; }
+.pd-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #56615A; }
+.pd-meta { font-size: 13px; color: #56615A; }
+.pd-h2 { margin: 0; font-size: 15px; font-weight: 700; }
+.pd-h3 { margin: 4px 0 0; font-size: 13px; font-weight: 700; }
+.pd-row-between { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.pd-row-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pd-note { font-size: 14px; line-height: 1.5; color: #3B463F; background: #F7F8F5; border-radius: 10px; padding: 12px 14px; }
+.pd-note-plain { font-size: 14px; line-height: 1.5; color: #3B463F; }
+
+/* crop + disease = pair */
+.pd-equation { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; }
+.pd-part { flex: 1 1 170px; border: 1px solid #DDE2DA; border-top: 5px solid; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.pd-op { display: flex; align-items: center; font-size: 26px; font-weight: 700; color: #8A938C; }
+.pd-pair { flex: 1.3 1 220px; background: #17201B; color: #F4F5F1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.pd-part-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.pd-part-name { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+.pd-part-sub { font-size: 13px; color: #56615A; }
+.pd-pair-sub { font-size: 13px; color: #CBD3CD; }
+.pd-pair-sub strong { font-size: 20px; color: #FFFFFF; }
+/* Gradio's prose styles colour every <p>; win back the colours inside our cards */
+.pd-card p, .pd-card span, .pd-card h2, .pd-card h3, .pd-card figcaption { color: inherit; }
+.pd-card .pd-pair .pd-part-name, .pd-card .pd-pair .pd-pair-sub strong { color: #FFFFFF !important; }
+.pd-card .pd-pair .pd-pair-sub { color: #CBD3CD !important; }
+.pd-card .pd-amber { color: #F2C79A !important; }
+.pd-card .pd-skyblue { color: #A9C8EE !important; }
+.pd-card .pd-meta, .pd-card .pd-part-sub, .pd-card .pd-rank, .pd-card .pd-kind, .pd-card .pd-sim, .pd-card .pd-eyebrow { color: #56615A !important; }
+.pd-card .pd-note { color: #3B463F !important; }
+.pd-card .pd-ok-text { color: #1F6B45 !important; }
+.pd-card .pd-bad-text { color: #A1331F !important; }
+.pd-card .pd-badge-unseen { color: #8A4510 !important; }
+.pd-card .pd-badge-seen { color: #1D4F86 !important; }
+.pd-amber { color: #F2C79A; }
+.pd-skyblue { color: #A9C8EE; }
+
+/* top 5 */
+.pd-top5 { display: flex; flex-direction: column; }
+.pd-toprow { display: grid; grid-template-columns: 24px minmax(0, 1fr) 96px 52px; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #EEF1EC; }
+.pd-rank, .pd-kind { font-size: 12px; color: #56615A; font-variant-numeric: tabular-nums; }
+.pd-topname { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-size: 14px; }
+.pd-bar { height: 6px; border-radius: 999px; background: #EEF1EC; overflow: hidden; }
+.pd-bar div { height: 100%; border-radius: 999px; }
+.pd-pct { font-size: 14px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.pd-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.pd-badge-unseen { color: #8A4510; background: #FDEBD8; }
+.pd-badge-seen { color: #1D4F86; background: #E3ECF7; }
+
+/* similar images */
+.pd-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.pd-fig { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.pd-fig img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block; background: #E9ECE6; }
+.pd-fig figcaption { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: #17201B; }
+.pd-sim { color: #56615A; font-variant-numeric: tabular-nums; }
+
+/* compare */
+.pd-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.pd-compare .pd-card { margin-bottom: 0; }
+.pd-group { margin: 4px 0 8px !important; }
+.pd-model-name { margin: 0; font-size: 15px; font-weight: 700; }
+.pd-winner { border: 2px solid #1F6B45; }
+.pd-model .pd-pair { flex: none; }
+.pd-mini { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pd-mini .pd-part { padding: 10px; border-top-width: 4px; }
+.pd-mini-name { font-size: 16px; font-weight: 700; line-height: 1.2; }
+.pd-verdict { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+.pd-ok { color: #1F6B45; background: #E6F1EA; }
+.pd-bad { color: #A1331F; background: #F8E7E3; }
+.pd-ok-text { color: #1F6B45; font-weight: 700; }
+.pd-bad-text { color: #A1331F; font-weight: 700; }
+.pd-scroll { overflow-x: auto; }
+.pd-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; min-width: 520px; }
+.pd-table th { text-align: right; font-size: 12px; color: #56615A; font-weight: 700; padding: 8px 0; }
+.pd-table th:first-child, .pd-table td:first-child { text-align: left; }
+.pd-table td { text-align: right; padding: 9px 0; border-top: 1px solid #EEF1EC; }
+.pd-table tr.pd-strong td { font-weight: 700; }
+.pd-card .pd-table, .pd-card .pd-table th, .pd-card .pd-table td, .pd-card .pd-table tr { border: none !important; background: transparent !important; }
+.pd-card .pd-table td { border-top: 1px solid #EEF1EC !important; padding: 9px 0 9px 12px !important; }
+.pd-card .pd-table th { padding: 8px 0 8px 12px !important; }
+.pd-card .pd-table th:first-child, .pd-card .pd-table td:first-child { padding-left: 0 !important; }
+
+@media (max-width: 720px) {
+  .pd-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pd-toprow { grid-template-columns: 20px minmax(0, 1fr) 48px; }
+  .pd-kind { display: none; }
+}

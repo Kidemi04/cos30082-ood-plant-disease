@@ -85,7 +85,8 @@ def sweep(seen_log_p, seen_records, unseen_log_p, unseen_records, seen):
         rows.append({'gamma': float(gamma), 'seen': s, 'unseen': u, 'harmonic': harmonic_mean(s, u)})
     best = max(rows, key=lambda row: (round(row['harmonic'], 6), -row['gamma']))
     points = sorted({(r['unseen'], r['seen']) for r in rows} | {(0.0, rows[0]['seen'])})
-    ausuc = float(np.trapezoid([p[1] for p in points], [p[0] for p in points])) if len(points) > 1 else 0.0
+    trapezoid = getattr(np, 'trapezoid', None) or np.trapz  # NumPy 2 renamed trapz to trapezoid
+    ausuc = float(trapezoid([p[1] for p in points], [p[0] for p in points])) if len(points) > 1 else 0.0
     return rows, best, ausuc
 
 
@@ -135,9 +136,13 @@ def seed_everything(seed):
     torch.manual_seed(seed)
 
 
-def make_datasets(stage, mean=IMAGENET_MEAN, std=IMAGENET_STD, image_size=224):
-    """select: train / val_seen / pseudo (val_seen + pseudo_unseen). final: train (8,000) / test splits."""
-    train_tf, eval_tf = train_transform(image_size, mean, std), eval_transform(image_size, mean, std)
+def make_datasets(stage, mean=IMAGENET_MEAN, std=IMAGENET_STD, image_size=224, augment='standard'):
+    """select: train / val_seen / pseudo (val_seen + pseudo_unseen). final: train (8,000) / test splits.
+
+    augment chooses the training augmentation strength ('standard' or 'strong'); evaluation is unchanged.
+    """
+    train_tf = train_transform(image_size, mean, std, strength=augment)
+    eval_tf = eval_transform(image_size, mean, std)
     if stage == 'select':
         p = pseudo_protocol()
         return {'train': DPDDataset(p['train'], train_tf, image_size),

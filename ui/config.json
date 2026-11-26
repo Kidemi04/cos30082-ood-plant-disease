@@ -1,0 +1,103 @@
+{
+  "default_model": "proposed",
+  "index_model": "proposed",
+  "models": {
+    "proposed": {
+      "label": "Proposed · BioCLIP heads + strong aug. (field-robust)",
+      "short": "BioCLIP heads + strong aug.",
+      "arch": "BioCLIP image encoder · strong augmentation",
+      "group": "proposed",
+      "kind": "clip",
+      "run": "runs/clip_bioclip_heads_strong_final",
+      "gamma": "calibration.json",
+      "results": {
+        "seen": 45.41,
+        "unseen": 67.75,
+        "h": 54.38,
+        "h5": 85.33,
+        "source": "results/comparison.md (clip_bioclip_heads_strong_calibrated)"
+      }
+    },
+    "bioclip_standard": {
+      "label": "Proposed · BioCLIP heads (standard aug.)",
+      "short": "BioCLIP heads",
+      "arch": "BioCLIP image encoder · standard augmentation",
+      "group": "proposed",
+      "kind": "clip",
+      "run": "runs/clip_bioclip_heads_final",
+      "gamma": "calibration.json",
+      "results": {
+        "seen": 47.4,
+        "unseen": 67.23,
+        "h": 55.6,
+        "h5": 85.15,
+        "source": "results/comparison.md (clip_bioclip_heads_calibrated)"
+      }
+    },
+    "disentangled": {
+      "label": "Proposed · Disentangled ConvNeXt v2",
+      "short": "Disentangled v2",
+      "arch": "ConvNeXt-Tiny · separate crop and disease branches",
+      "group": "proposed",
+      "kind": "disentangled",
+      "run": "runs/disentangled_v2_final_seed42",
+      "gamma": "calibration.json",
+      "results": {
+        "seen": 44.68,
+        "unseen": 61.38,
+        "h": 51.71,
+        "h5": 79.6,
+        "source": "results/disentangled_v2_calibrated (main branch)"
+      }
+    },
+    "csp": {
+      "label": "Proposed · CSP + WiSE-FT (CLIP)",
+      "short": "CSP + WiSE-FT",
+      "arch": "OpenAI CLIP ViT-B/16 · learned crop and disease words",
+      "group": "proposed",
+      "kind": "csp",
+      "checkpoint": "runs/csp_wiseft_vit_b16_final_seed42/final.pt",
+      "gamma": 5.3459,
+      "results": {
+        "seen": 43.47,
+        "unseen": 67.39,
+        "h": 52.85,
+        "h5": 80.53,
+        "source": "results/csp_wiseft_vit_b16/calibrated_stacking_given_gamma.md (main branch)"
+      }
+    },
+    "baseline1": {
+      "label": "Baseline 1 · two ConvNeXt CNNs",
+      "short": "Baseline 1",
+      "arch": "Crop CNN × disease CNN · ConvNeXt-Tiny",
+      "group": "baseline",
+      "kind": "independent",
+      "crop_weights": "runs/baseline1_crop_convnext_tiny_balanced_final_seed42/final.pth",
+      "disease_weights": "runs/baseline1_disease_convnext_tiny_balanced_final_seed42/final.pth",
+      "gamma": 6.081360077439692,
+      "results": {
+        "seen": 36.36,
+        "unseen": 63.66,
+        "h": 46.28,
+        "h5": 77.44,
+        "source": "results/convnext_tiny_independent/calibrated_stacking_given_gamma.md (main branch)"
+      }
+    },
+    "baseline2": {
+      "label": "Baseline 2 · multi-task ConvNeXt",
+      "short": "Baseline 2",
+      "arch": "Multi-task CNN · ConvNeXt-Tiny",
+      "group": "baseline",
+      "kind": "multitask",
+      "weights": "runs/baseline2_final_seed42/final.pth",
+      "gamma": 5.9,
+      "results": {
+        "seen": 41.78,
+        "unseen": 66.44,
+        "h": 51.3,
+        "h5": 77.5,
+        "source": "results/comparison.md (b2_multitask_calibrated); gamma 5.9 from runs/baseline2_final_seed42/calibration.json"
+      }
+    }
+  }
+}
