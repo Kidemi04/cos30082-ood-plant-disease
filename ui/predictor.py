@@ -168,6 +168,69 @@ class CSPModel(nn.Module):
         return {'composition': logits}
 
 
+class BioCLIP2Ensemble(nn.Module):
+    """Final model (Neng yi): BioCLIP 2 ViT-L/14 + WiSE-FT, an ensemble of 3 seeds with horizontal-flip TTA.
+
+    The checkpoint (format 'wise-clip-ensemble/1') stores, per seed, the fine-tuned top image blocks and the
+    crop / disease heads; the frozen lower blocks come from the public BioCLIP 2 weights. Scores follow the
+    checkpoint's own rule: logits = logit_scale * normalise(image feature) . head, then the mean of each factor's
+    log-softmax over seeds and flips. Checked against the checkpoint's test reference (H 65.24 vs 65.23).
+    """
+
+    def __init__(self, path):
+        super().__init__()
+        import open_clip
+        ckpt = torch.load(path, map_location='cpu', weights_only=True)
+        name, pretrained = ckpt['open_clip']
+        clip = open_clip.create_model(name, pretrained=pretrained)
+        self.visual = clip.visual.requires_grad_(False)  # inference only; the text tower is not needed
+        self.scale = float(clip.logit_scale.detach().exp())
+        self.mean, self.std = tuple(ckpt['mean']), tuple(ckpt['std'])
+        self.flip = ckpt.get('tta') == 'horizontal flip'
+        own = dict(self.visual.named_parameters())
+        self.member_maps = []
+        for i, member in enumerate(ckpt['members']):
+            mapping = []
+            for key, value in member['state'].items():
+                if key.startswith('clip.visual.'):
+                    pname = key[len('clip.visual.'):]
+                    if pname not in own:
+                        raise ValueError(f'Unexpected weight in {path}: {key}')
+                    bname = f'm{i}__' + pname.replace('.', '__')
+                    self.register_buffer(bname, value, persistent=False)
+                    mapping.append((pname, bname))
+            self.register_buffer(f'm{i}__crop_head', member['state']['crop_head'], persistent=False)
+            self.register_buffer(f'm{i}__disease_head', member['state']['disease_head'], persistent=False)
+            self.member_maps.append(mapping)
+
+    def forward(self, x):
+        batch = x.shape[0]
+        views = torch.cat([x, torch.flip(x, dims=[3])]) if self.flip else x
+        n_views = views.shape[0] // batch
+        own = dict(self.visual.named_parameters())
+        crop_lp = disease_lp = 0
+        for i, mapping in enumerate(self.member_maps):
+            with torch.no_grad():
+                for pname, bname in mapping:  # swap in this seed's fine-tuned blocks
+                    own[pname].copy_(getattr(self, bname))
+            # Autocast caches half-precision copies of weights for the whole region; drop them after the swap,
+            # or later seeds silently reuse the first seed's cached blocks.
+            torch.clear_autocast_cache()
+            feats = F.normalize(self.visual(views).float(), dim=-1)
+            # Heads in full precision: with logit scale 100, half precision rounds logits to ~0.06 and flips
+            # close seen-vs-unseen calls near gamma.
+            with torch.autocast(x.device.type, enabled=False):
+                for head, total in (('crop', 'c'), ('disease', 'd')):
+                    logits = self.scale * feats @ getattr(self, f'm{i}__{head}_head').float().t()
+                    lp = F.log_softmax(logits, dim=-1).view(n_views, batch, -1).mean(0)
+                    if total == 'c':
+                        crop_lp = crop_lp + lp
+                    else:
+                        disease_lp = disease_lp + lp
+        k = len(self.member_maps)
+        return {'crop': crop_lp / k, 'disease': disease_lp / k}
+
+
 class ClipModel(nn.Module):
     """The proposed model (any variant of src/train_clip_compositional.py), plus image embeddings."""
 
@@ -221,6 +284,7 @@ class Predictor:
                  'independent': [spec.get('crop_weights', ''), spec.get('disease_weights', '')],
                  'disentangled': [str(Path(spec.get('run', '')) / 'final.pth')],
                  'csp': [spec.get('checkpoint', '')],
+                 'bioclip2': [spec.get('checkpoint', '')],
                  'multitask': [spec.get('weights', '')]}[spec['kind']]
         return all(f and self._path(f).is_file() for f in files)
 
@@ -234,6 +298,9 @@ class Predictor:
         spec = self.config['models'][key]
         if spec['kind'] == 'clip':
             net, mean, std = ClipModel(self._path(spec['run']), self.labels.taxonomy), CLIP_MEAN, CLIP_STD
+        elif spec['kind'] == 'bioclip2':
+            net = BioCLIP2Ensemble(self._path(spec['checkpoint']))
+            mean, std = net.mean, net.std
         elif spec['kind'] == 'csp':
             net = CSPModel(self._path(spec['checkpoint']), self.labels.taxonomy)
             mean, std = net.mean, net.std
