@@ -1,0 +1,376 @@
+{
+  "model": "llf_ens_raw",
+  "created": "2026-11-21T10:24:04+00:00",
+  "primary_average": "per_class",
+  "candidates": "all 333 compositions",
+  "splits": {
+    "test_seen": {
+      "images": 2000,
+      "composition": {
+        "top1": {
+          "per_class": 0.5884997886299623,
+          "per_image": 0.7385
+        },
+        "top5": {
+          "per_class": 0.8348549614754581,
+          "per_image": 0.9255
+        }
+      },
+      "crop": {
+        "top1": {
+          "per_class": 0.739134143859562,
+          "per_image": 0.939
+        },
+        "top5": {
+          "per_class": 0.9254293652897073,
+          "per_image": 0.982
+        }
+      },
+      "disease": {
+        "top1": {
+          "per_class": 0.5886697448481006,
+          "per_image": 0.7485
+        },
+        "top5": {
+          "per_class": 0.8609059729547958,
+          "per_image": 0.926
+        }
+      }
+    },
+    "test_unseen": {
+      "images": 1448,
+      "composition": {
+        "top1": {
+          "per_class": 0.08546338564078255,
+          "per_image": 0.08218232044198895
+        },
+        "top5": {
+          "per_class": 0.4276287458954756,
+          "per_image": 0.406767955801105
+        }
+      },
+      "crop": {
+        "top1": {
+          "per_class": 0.7228273535532508,
+          "per_image": 0.789364640883978
+        },
+        "top5": {
+          "per_class": 0.9043637101224409,
+          "per_image": 0.9288674033149171
+        }
+      },
+      "disease": {
+        "top1": {
+          "per_class": 0.21303079395626448,
+          "per_image": 0.11256906077348067
+        },
+        "top5": {
+          "per_class": 0.417051547335499,
+          "per_image": 0.3259668508287293
+        }
+      },
+      "composition_unseen_only": {
+        "top1": {
+          "per_class": 0.880529495088448,
+          "per_image": 0.880524861878453
+        },
+        "top5": {
+          "per_class": 0.9962104770893626,
+          "per_image": 0.9930939226519337
+        }
+      }
+    }
+  },
+  "harmonic_mean": {
+    "top1": {
+      "per_class": 0.14925202534878226,
+      "per_image": 0.14790532739567872
+    },
+    "top5": {
+      "per_class": 0.5655644949649592,
+      "per_image": 0.5651471859766402
+    }
+  },
+  "inputs": {
+    "test_seen": "runs\\llf_ens_final\\test_seen.npz",
+    "test_unseen": "runs\\llf_ens_final\\test_unseen.npz"
+  },
+  "test_seen_top_confusions": {
+    "composition": [
+      {
+        "true": "paddy_healthy",
+        "predicted": "paddy_leafblast",
+        "count": 15,
+        "share_of_true_class": 0.46875
+      },
+      {
+        "true": "paddy_healthy",
+        "predicted": "paddy_blast",
+        "count": 11,
+        "share_of_true_class": 0.34375
+      },
+      {
+        "true": "soybean_healthy",
+        "predicted": "soybean_caterpillar",
+        "count": 10,
+        "share_of_true_class": 0.3448275862068966
+      },
+      {
+        "true": "tomato_bacterial_spot",
+        "predicted": "tomato_septoria_leaf_spot",
+        "count": 10,
+        "share_of_true_class": 0.37037037037037035
+      },
+      {
+        "true": "soybean_caterpillar",
+        "predicted": "soybean_diabrotica_speciosa",
+        "count": 10,
+        "share_of_true_class": 0.43478260869565216
+      },
+      {
+        "true": "tomato_septoria_leaf_spot",
+        "predicted": "tomato_leaf_blight",
+        "count": 9,
+        "share_of_true_class": 0.23076923076923078
+      },
+      {
+        "true": "wheat_stripe_rust",
+        "predicted": "wheat_rust",
+        "count": 9,
+        "share_of_true_class": 0.9
+      },
+      {
+        "true": "tomato_septoria_leaf_spot",
+        "predicted": "tomato_verticulium_wilt",
+        "count": 8,
+        "share_of_true_class": 0.20512820512820512
+      },
+      {
+        "true": "cassava_mosaic",
+        "predicted": "cassava_green_mottle",
+        "count": 7,
+        "share_of_true_class": 0.056451612903225805
+      },
+      {
+        "true": "paddy_hispa",
+        "predicted": "paddy_blast",
+        "count": 6,
+        "share_of_true_class": 0.5
+      },
+      {
+        "true": "cassava_mosaic",
+        "predicted": "cassava_healthy",
+        "count": 6,
+        "share_of_true_class": 0.04838709677419355
+      },
+      {
+        "true": "cassava_healthy",
+        "predicted": "cassava_brown_streak_disease",
+        "count": 5,
+        "share_of_true_class": 0.17857142857142858
+      },
+      {
+        "true": "paddy_hispa",
+        "predicted": "paddy_leafblast",
+        "count": 5,
+        "share_of_true_class": 0.4166666666666667
+      },
+      {
+        "true": "tomato_blight_leaf",
+        "predicted": "tomato_brown_spot",
+        "count": 5,
+        "share_of_true_class": 0.7142857142857143
+      },
+      {
+        "true": "soybean_healthy",
+        "predicted": "soybean_diabrotica_speciosa",
+        "count": 5,
+        "share_of_true_class": 0.1724137931034483
+      }
+    ],
+    "crop": [
+      {
+        "true": "potato",
+        "predicted": "tomato",
+        "count": 5,
+        "share_of_true_class": 0.09433962264150944
+      },
+      {
+        "true": "cherry",
+        "predicted": "apple",
+        "count": 4,
+        "share_of_true_class": 0.2857142857142857
+      },
+      {
+        "true": "apple",
+        "predicted": "guava",
+        "count": 3,
+        "share_of_true_class": 0.012605042016806723
+      },
+      {
+        "true": "plum",
+        "predicted": "apple",
+        "count": 3,
+        "share_of_true_class": 0.3
+      },
+      {
+        "true": "apple",
+        "predicted": "peach",
+        "count": 3,
+        "share_of_true_class": 0.012605042016806723
+      },
+      {
+        "true": "cabbage",
+        "predicted": "brassica",
+        "count": 2,
+        "share_of_true_class": 0.5
+      },
+      {
+        "true": "basil",
+        "predicted": "tomato",
+        "count": 2,
+        "share_of_true_class": 0.18181818181818182
+      },
+      {
+        "true": "cherry",
+        "predicted": "peach",
+        "count": 2,
+        "share_of_true_class": 0.14285714285714285
+      },
+      {
+        "true": "potato",
+        "predicted": "apple",
+        "count": 2,
+        "share_of_true_class": 0.03773584905660377
+      },
+      {
+        "true": "apple",
+        "predicted": "tomato",
+        "count": 2,
+        "share_of_true_class": 0.008403361344537815
+      },
+      {
+        "true": "cassava",
+        "predicted": "corn",
+        "count": 2,
+        "share_of_true_class": 0.007434944237918215
+      },
+      {
+        "true": "lettuce",
+        "predicted": "tomato",
+        "count": 2,
+        "share_of_true_class": 0.6666666666666666
+      },
+      {
+        "true": "banana",
+        "predicted": "corn",
+        "count": 2,
+        "share_of_true_class": 0.0625
+      },
+      {
+        "true": "broccoli",
+        "predicted": "tomato",
+        "count": 2,
+        "share_of_true_class": 0.4
+      },
+      {
+        "true": "bean",
+        "predicted": "soybean",
+        "count": 2,
+        "share_of_true_class": 0.11764705882352941
+      }
+    ],
+    "disease": [
+      {
+        "true": "healthy",
+        "predicted": "leafblast",
+        "count": 15,
+        "share_of_true_class": 0.042492917847025496
+      },
+      {
+        "true": "healthy",
+        "predicted": "blast",
+        "count": 11,
+        "share_of_true_class": 0.031161473087818695
+      },
+      {
+        "true": "healthy",
+        "predicted": "caterpillar",
+        "count": 10,
+        "share_of_true_class": 0.028328611898016998
+      },
+      {
+        "true": "bacterial_spot",
+        "predicted": "septoria_leaf_spot",
+        "count": 10,
+        "share_of_true_class": 0.19230769230769232
+      },
+      {
+        "true": "caterpillar",
+        "predicted": "diabrotica_speciosa",
+        "count": 10,
+        "share_of_true_class": 0.43478260869565216
+      },
+      {
+        "true": "septoria_leaf_spot",
+        "predicted": "leaf_blight",
+        "count": 9,
+        "share_of_true_class": 0.21951219512195122
+      },
+      {
+        "true": "stripe_rust",
+        "predicted": "rust",
+        "count": 9,
+        "share_of_true_class": 0.9
+      },
+      {
+        "true": "septoria_leaf_spot",
+        "predicted": "verticulium_wilt",
+        "count": 8,
+        "share_of_true_class": 0.1951219512195122
+      },
+      {
+        "true": "mosaic",
+        "predicted": "green_mottle",
+        "count": 7,
+        "share_of_true_class": 0.05384615384615385
+      },
+      {
+        "true": "mosaic",
+        "predicted": "healthy",
+        "count": 7,
+        "share_of_true_class": 0.05384615384615385
+      },
+      {
+        "true": "hispa",
+        "predicted": "blast",
+        "count": 6,
+        "share_of_true_class": 0.5
+      },
+      {
+        "true": "healthy",
+        "predicted": "brown_streak_disease",
+        "count": 5,
+        "share_of_true_class": 0.014164305949008499
+      },
+      {
+        "true": "marssonina_blotch",
+        "predicted": "downy_mildew",
+        "count": 5,
+        "share_of_true_class": 0.35714285714285715
+      },
+      {
+        "true": "brown_spot",
+        "predicted": "bacterial_blight",
+        "count": 5,
+        "share_of_true_class": 0.06944444444444445
+      },
+      {
+        "true": "hispa",
+        "predicted": "leafblast",
+        "count": 5,
+        "share_of_true_class": 0.4166666666666667
+      }
+    ]
+  }
+}

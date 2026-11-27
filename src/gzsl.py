@@ -17,6 +17,7 @@ Commands
 import argparse
 import csv
 import json
+import os
 from pathlib import Path
 import random
 import sys
@@ -31,7 +32,9 @@ from evaluate import (Taxonomy, accuracy, align, harmonic_mean, level_scores, lo
                       save_predictions, top_k_hits)
 from preprocessing import IMAGENET_MEAN, IMAGENET_STD, DPDDataset, eval_transform, train_transform  # noqa: E402
 
-PSEUDO_MANIFEST = PROJECT / 'dataset/metadata/pseudo_unseen_split.csv'
+# GZSL_PSEUDO_MANIFEST switches development runs to another held-out list (e.g. pseudo_unseen_dev.csv).
+# Official numbers always use the default 10-pair split.
+PSEUDO_MANIFEST = Path(os.environ.get('GZSL_PSEUDO_MANIFEST', PROJECT / 'dataset/metadata/pseudo_unseen_split.csv'))
 GAMMAS = np.round(np.arange(0.0, 30.0001, 0.1), 1)
 
 
