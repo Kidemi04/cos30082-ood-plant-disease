@@ -6,8 +6,10 @@ Gradio app for the COS30082 OOD plant disease project. Upload a leaf photo and i
 - the **Top 5** pairs;
 - the **most similar training images**: the closest photos of the predicted pair, or for an unseen pair,
   the closest same-crop and same-disease photos;
-- a **Compare models** tab that runs both baselines and the proposed approaches (BioCLIP heads with standard and with
-  strong augmentation, Disentangled v2, CSP + WiSE-FT) on the same photo.
+- a **Compare models** tab that runs both baselines and the proposed approaches (the final BioCLIP 2 + WiSE-FT
+  ensemble, BioCLIP heads with standard and with strong augmentation, Disentangled v2, CSP + WiSE-FT) on the same photo.
+
+The default model is the final one, BioCLIP 2 + WiSE-FT (H 65.23).
 
 Scores use the same calibration (gamma) as the reported results, so the UI agrees with `results/`.
 
@@ -19,7 +21,8 @@ Double-click `ui\run_ui.bat`, or from the repo root:
 python ui\app.py
 ```
 
-It opens http://127.0.0.1:7860. The first launch loads the proposed model (a few seconds).
+It opens http://127.0.0.1:7860. The first launch loads the default model (a few seconds); the other models load
+the first time they are used.
 
 ## Files
 
@@ -48,6 +51,7 @@ It opens http://127.0.0.1:7860. The first launch loads the proposed model (a few
 - The repo, including `src/` (with `train_disentangled_v2.py` and `csp_model.py` from main), `evaluate.py`,
   `preprocessing.py` and `dataset_access.py`
 - The model folders in `runs/` (not in git):
+  - `bioclip2_wiseft_ensemble/wise_bioclip2_ens.pth` (BioCLIP 2 + WiSE-FT, 918 MB)
   - `clip_bioclip_heads_strong_final/` (BioCLIP heads + strong augmentation)
   - `clip_bioclip_heads_final/` (BioCLIP heads, standard augmentation)
   - `disentangled_v2_final_seed42/` (Disentangled v2)
@@ -56,9 +60,15 @@ It opens http://127.0.0.1:7860. The first launch loads the proposed model (a few
   - `baseline2_final_seed42/`
 - `ui/assets/`
 - Python with `requirements-ui.txt` installed
-- Two base-model downloads in `%USERPROFILE%\.cache\huggingface\hub\` (fetched automatically on a first run
+- Three base-model downloads in `%USERPROFILE%\.cache\huggingface\hub\` (fetched automatically on a first run
   with internet, or copied from another machine):
+  - `models--imageomics--bioclip-2` (BioCLIP 2 + WiSE-FT, about 1.7 GB)
   - `models--imageomics--bioclip` (BioCLIP heads)
   - `models--timm--vit_base_patch16_clip_224.openai` (CSP + WiSE-FT)
 
-With all six models loaded the app uses about 2.3 GB of GPU memory (measured), which fits the 4 GB RTX 2050.
+  This Hugging Face cache keeps the large weight files in a shared `hub\blobs\` folder and links to them from the
+  model folders, so when copying to another machine, copy the whole `hub` folder, not just the model folders.
+
+GPU memory (measured on an RTX 2070): the BioCLIP 2 model alone uses about 2 GB; all seven models loaded together
+use about 4.5 GB. A 4 GB card (such as the RTX 2050 laptop) can't hold all seven, so use only the Identify tab
+there; the Compare tab loads every model.

@@ -1,7 +1,23 @@
 {
-  "default_model": "proposed",
+  "default_model": "bioclip2",
   "index_model": "proposed",
   "models": {
+    "bioclip2": {
+      "label": "Proposed · BioCLIP 2 + WiSE-FT (final model)",
+      "short": "BioCLIP 2 + WiSE-FT",
+      "arch": "BioCLIP 2 ViT-L/14 · 3-seed ensemble · flip TTA",
+      "group": "proposed",
+      "kind": "bioclip2",
+      "checkpoint": "runs/bioclip2_wiseft_ensemble/wise_bioclip2_ens.pth",
+      "gamma": 5.7,
+      "results": {
+        "seen": 54.59,
+        "unseen": 81.02,
+        "h": 65.23,
+        "h5": 90.94,
+        "source": "test_reference stored in the checkpoint; slide 7 of the presentation"
+      }
+    },
     "proposed": {
       "label": "Proposed · BioCLIP heads + strong aug. (field-robust)",
       "short": "BioCLIP heads + strong aug.",
